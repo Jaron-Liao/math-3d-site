@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>章节 · 高等数学 3D</title>
+<link rel="stylesheet" href="assets/katex/katex-inline.css">
+<link rel="stylesheet" href="css/site.css">
+<script type="importmap">
+{ "imports": { "three": "./assets/three.module.min.js", "three/addons/": "./assets/jsm/" } }
+</script>
+</head>
+<body>
+
+<nav class="nav solid">
+  <div class="nav-logo"><a href="index.html" style="color:inherit"><b>高等数学</b></a><span>3D EDITION</span></div>
+  <div class="nav-links">
+    <a href="index.html#notes">讲义</a>
+    <a href="lab.html">实验室</a>
+    <a href="gallery.html">3D 展厅</a>
+    <a href="index.html#about">关于</a>
+  </div>
+  <a class="nav-gh" data-repo href="#" target="_blank" rel="noopener">GitHub ↗</a>
+</nav>
+
+<div class="reader">
+  <aside class="side">
+    <h4>章节目录</h4>
+    <div id="side-list"></div>
+  </aside>
+
+  <article class="article">
+    <div class="hero-eyebrow" id="c-kicker">CHAPTER</div>
+    <h1 id="c-title">加载中…</h1>
+    <p class="lead" id="c-lead"></p>
+    <div id="c-body"></div>
+    <div class="pager" id="c-pager"></div>
+  </article>
+
+  <aside class="reader-3d">
+    <canvas id="c-canvas"></canvas>
+    <div class="cap"><b id="c-model-title">3D 模型</b><span id="c-model-cap"></span></div>
+  </aside>
+</div>
+
+<footer class="foot">
+  <span>© <span id="year"></span> 高等数学 · 3D Edition</span>
+  <a href="index.html">← 返回目录</a>
+</footer>
+
+<script src="content/chapters.js"></script>
+<script src="assets/katex/katex.min.js"></script>
+<script src="assets/katex/contrib/auto-render.min.js"></script>
+<script src="js/site.js"></script>
+<script type="module" src="js/chapter.js"></script>
+</body>
+</html>

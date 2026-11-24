@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>高等数学 · 3D —— 从极限到常微分方程</title>
+<meta name="description" content="可交互的高等数学 3D 讲义：十座 Blender 数学模型、ε-N 收敛环带、旋转体曲面与实时参数曲面实验室。">
+<link rel="stylesheet" href="assets/katex/katex-inline.css">
+<link rel="stylesheet" href="css/site.css">
+<script type="importmap">
+{ "imports": {
+    "three": "./assets/three.module.min.js",
+    "three/addons/": "./assets/jsm/"
+} }
+</script>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo"><b>高等数学</b><span>3D EDITION</span></div>
+  <div class="nav-links">
+    <a href="#notes">讲义</a>
+    <a href="lab.html">实验室</a>
+    <a href="gallery.html">3D 展厅</a>
+    <a href="#data">数据洞察</a>
+    <a href="#about">关于</a>
+  </div>
+  <a class="nav-gh" data-repo href="#" target="_blank" rel="noopener">GitHub ↗</a>
+</nav>
+
+<header class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-veil"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Calculus · Built in 3D</div>
+    <h1>看得见的<br><em>高等数学</em></h1>
+    <p class="hero-sub">
+      十座由 Blender 生成的数学模型，把 ε-N、切线、旋转体、向量场从符号变成可以旋转、可以走近的实体。
+      公式仍然严格，但这一次你能看见它。
+    </p>
+    <div class="hero-meta">
+      <div><b>10</b>章节</div>
+      <div><b>3</b>已上线正文</div>
+      <div><b>6</b>3D 模型</div>
+      <div><b>实时</b>参数曲面</div>
+    </div>
+    <div class="hero-cta">
+      <a class="btn primary" href="#notes">开始阅读</a>
+      <a class="btn" href="gallery.html">进入 3D 展厅 →</a>
+    </div>
+  </div>
+  <div class="hero-scroll"><span>SCROLL</span><i></i></div>
+</header>
+
+<section class="sec" id="notes">
+  <div class="sec-head reveal">
+    <h2 class="sec-title"><small>Chapters</small>十章主线，一条脉络</h2>
+    <p class="sec-desc">从数列极限出发，经导数、积分、级数，抵达常微分方程。每章配一座对应的 3D 模型，可在章节页内旋转查看。</p>
+  </div>
+  <div class="ch-grid" id="ch-grid"></div>
+</section>
+
+<section class="sec" id="lab">
+  <div class="sec-head reveal">
+    <h2 class="sec-title"><small>Live Lab</small>把曲面握在手里</h2>
+    <p class="sec-desc">拖动旋转、滚轮缩放，实时修改振幅与频率，观察偏导数的正负如何决定鞍点的形状。</p>
+  </div>
+  <div class="canvas-shell reveal" style="min-height:520px">
+    <canvas id="lab-preview"></canvas>
+    <div class="canvas-tag">z = a · sin(bx) · cos(cy)</div>
+    <div class="canvas-hint">拖动旋转 · 滚轮缩放</div>
+  </div>
+  <div style="margin-top:22px" class="reveal">
+    <a class="btn" href="lab.html">打开完整实验室 →</a>
+  </div>
+</section>
+
+<section class="sec" id="stage">
+  <div class="sec-head reveal">
+    <h2 class="sec-title"><small>3D Gallery</small>走进一座数学展厅</h2>
+    <p class="sec-desc">十个模型悬在同一片空间里，绕环而行，点击任意一座即可进入对应章节。</p>
+  </div>
+  <div class="reveal" style="border:1px solid var(--line);border-radius:18px;padding:38px 40px;background:linear-gradient(160deg,rgba(32,27,20,.7),rgba(14,12,9,.6));display:flex;justify-content:space-between;align-items:center;gap:26px;flex-wrap:wrap">
+    <div>
+      <div style="font-family:var(--serif);font-size:26px;color:#F3ECDD">全站 3D 空间导航</div>
+      <p style="color:var(--text-3);font-size:13.5px;margin:8px 0 0;max-width:520px">相机沿环形轨道穿行，模型随行就位；滚轮与拖拽均可控制，右侧圆点快速跳转。</p>
+    </div>
+    <a class="btn primary" href="gallery.html">进入展厅</a>
+  </div>
+</section>
+
+<section class="sec" id="data">
+  <div class="sec-head reveal">
+    <h2 class="sec-title"><small>Insights</small>数据与来源</h2>
+    <p class="sec-desc">右半部分来自 IMA 知识库中的行业研报；左半部分是本站自身的构建指标，全部由数据层实时统计。</p>
+  </div>
+  <div class="stats reveal" id="stat-cards"></div>
+  <div class="bars reveal" id="site-metrics">
+    <div style="font-family:var(--serif);font-size:19px;margin-bottom:6px">本站构建指标</div>
+    <div id="bars-body"></div>
+    <div class="bars-src">统计口径：content/chapters.js 数据层实时计算；行业数据引自 IMA 知识库研报。</div>
+  </div>
+</section>
+
+<section class="sec" id="about">
+  <div class="sec-head reveal">
+    <h2 class="sec-title"><small>About</small>关于这个站点</h2>
+  </div>
+  <div class="about-grid reveal">
+    <div>
+      <p>这不是一份静态讲义的换皮。每一章的 3D 模型都由 Blender 5.0 以参数曲面脚本生成，导出为 glTF，再由 Three.js 在浏览器里实时布光、着色、旋转。模型的几何参数与章节内容一一对应：ε 环带的半径序列就是 <span>$|a_n-A|&lt;\\varepsilon$</span> 的收紧过程。</p>
+      <p>正文保持数学的完整度：定义、证明思路、可复用套路、以及最容易出错的地方，都以独立卡片呈现。公式由 KaTeX 排版，与纸质教材的规范一致。</p>
+    </div>
+    <dl class="kv">
+      <dt>技术栈</dt><dd>Three.js 0.160 · KaTeX · 原生 ES Modules</dd>
+      <dt>3D 生成</dt><dd>Blender 5.0.1 参数曲面脚本 → glTF (GLB)</dd>
+      <dt>部署</dt><dd>GitHub Pages · 纯静态</dd>
+      <dt>数据层</dt><dd>content/chapters.js 单一数据源</dd>
+      <dt>仓库</dt><dd><a data-repo href="#" target="_blank" rel="noopener">GitHub ↗</a></dd>
+    </dl>
+  </div>
+</section>
+
+<footer class="foot">
+  <span>© <span id="year"></span> 高等数学 · 3D Edition</span>
+  <span>模型由 Blender 脚本生成 · 公式由 KaTeX 渲染</span>
+</footer>
+
+<script src="content/chapters.js"></script>
+<script src="assets/katex/katex.min.js"></script>
+<script src="assets/katex/contrib/auto-render.min.js"></script>
+<script src="js/site.js"></script>
+<script type="module" src="js/home.js"></script>
+<script type="module" src="js/lab-preview.js"></script>
+<script>
+/* 首页数据区：研报洞察 + 本站指标（均由数据层渲染） */
+(function () {
+  const S = window.SITE;
+  document.getElementById('stat-cards').innerHTML = S.insights.map((i) =>
+    `<div class="stat"><b>${i.value}<i>${i.unit}</i></b><span>${i.label}</span><em>${i.src}</em></div>`
+  ).join('');
+
+  const live = S.chapters.filter((c) => c.status === 'live');
+  const secs = S.chapters.reduce((n, c) => n + c.sections.length, 0);
+  const forms = S.chapters.reduce((n, c) => n + c.formulas.length, 0);
+  const models = S.chapters.filter((c) => c.model).length;
+  const rows = [
+    { k: '章节总数', v: S.chapters.length, max: 10, t: S.chapters.length + ' 章' },
+    { k: '已完稿正文', v: live.length, max: 10, t: live.length + ' 章' },
+    { k: '正文小节', v: secs, max: 30, t: secs + ' 节' },
+    { k: '公式条目', v: forms, max: 30, t: forms + ' 条' },
+    { k: '3D 模型', v: models, max: 10, t: models + ' 座' },
+  ];
+  document.getElementById('bars-body').innerHTML = rows.map((r) =>
+    `<div class="bars-row"><span>${r.k}</span><i style="width:${Math.min(100, (r.v / r.max) * 100)}%"></i><b>${r.t}</b></div>`
+  ).join('');
+})();
+</script>
+</body>
+</html>

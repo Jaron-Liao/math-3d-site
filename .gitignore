@@ -1,0 +1,8 @@
+_shots/
+assets/three.module.js
+assets/katex/fonts/
+assets/katex/katex.min.css
+models/*.glb
+*.tgz
+package/
+node_modules/

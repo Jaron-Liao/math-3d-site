@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3D 实验室 · 高等数学</title>
+<link rel="stylesheet" href="assets/katex/katex-inline.css">
+<link rel="stylesheet" href="css/site.css">
+<script type="importmap">
+{ "imports": { "three": "./assets/three.module.min.js", "three/addons/": "./assets/jsm/" } }
+</script>
+</head>
+<body>
+
+<nav class="nav solid">
+  <div class="nav-logo"><a href="index.html" style="color:inherit"><b>高等数学</b></a><span>3D LAB</span></div>
+  <div class="nav-links">
+    <a href="index.html#notes">讲义</a>
+    <a href="lab.html" class="on">实验室</a>
+    <a href="gallery.html">3D 展厅</a>
+  </div>
+  <a class="nav-gh" data-repo href="#" target="_blank" rel="noopener">GitHub ↗</a>
+</nav>
+
+<section class="sec" style="padding-top:104px">
+  <div class="sec-head reveal">
+    <h2 class="sec-title"><small>Live Lab</small>参数曲面实验室</h2>
+    <p class="sec-desc">实时生成 <span>$z=a\\sin(bx)\\cos(cy)$</span> 的曲面。改变频率，观察极值点如何变密；改变振幅，观察鞍点如何被压平。</p>
+  </div>
+
+  <div class="lab-wrap">
+    <div class="canvas-shell">
+      <canvas id="lab-canvas"></canvas>
+      <div class="canvas-tag" id="lab-tag">z = a·sin(bx)·cos(cy)</div>
+      <div class="canvas-hint">拖动旋转 · 滚轮缩放</div>
+    </div>
+
+    <div class="lab-panel">
+      <h3>参数</h3>
+      <p>拖动滑块即时重建网格（120×120 顶点）</p>
+
+      <div class="ctl">
+        <label>振幅 a <b id="v-a">1.00</b></label>
+        <input type="range" id="p-a" min="0.1" max="2" step="0.05" value="1">
+      </div>
+      <div class="ctl">
+        <label>频率 b（x 方向） <b id="v-b">1.60</b></label>
+        <input type="range" id="p-b" min="0.4" max="4" step="0.1" value="1.6">
+      </div>
+      <div class="ctl">
+        <label>频率 c（y 方向） <b id="v-c">1.60</b></label>
+        <input type="range" id="p-c" min="0.4" max="4" step="0.1" value="1.6">
+      </div>
+
+      <div class="ctl">
+        <label>显示方式</label>
+        <div class="seg-ctl" id="modes">
+          <button data-m="solid" class="on">曲面</button>
+          <button data-m="wire">网格</button>
+          <button data-m="points">点云</button>
+        </div>
+      </div>
+
+      <div class="ctl">
+        <label>自动旋转</label>
+        <div class="seg-ctl" id="spin">
+          <button data-s="1" class="on">开</button>
+          <button data-s="0">关</button>
+        </div>
+      </div>
+
+      <div class="lab-note" id="lab-note"></div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <span>© <span id="year"></span> 高等数学 · 3D Edition</span>
+  <span>曲面由 Three.js 实时生成</span>
+</footer>
+
+<script src="content/chapters.js"></script>
+<script src="assets/katex/katex.min.js"></script>
+<script src="assets/katex/contrib/auto-render.min.js"></script>
+<script src="js/site.js"></script>
+<script type="module" src="js/lab.js"></script>
+</body>
+</html>

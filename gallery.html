@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3D 展厅 · 高等数学</title>
+<link rel="stylesheet" href="css/site.css">
+<script type="importmap">
+{ "imports": { "three": "./assets/three.module.min.js", "three/addons/": "./assets/jsm/" } }
+</script>
+</head>
+<body>
+
+<div class="stage-full"><canvas id="stage-canvas"></canvas></div>
+
+<div class="stage-ui">
+  <nav class="nav" style="position:fixed">
+    <div class="nav-logo"><a href="index.html" style="color:inherit"><b>高等数学</b></a><span>3D GALLERY</span></div>
+    <div class="nav-links">
+      <a href="index.html#notes">讲义</a>
+      <a href="lab.html">实验室</a>
+      <a href="gallery.html" class="on">3D 展厅</a>
+    </div>
+    <a class="nav-gh" data-repo href="#" target="_blank" rel="noopener">GitHub ↗</a>
+  </nav>
+
+  <div class="stage-dots" id="dots"></div>
+
+  <div class="stage-hud">
+    <div class="stage-label">
+      <small id="s-kicker">CHAPTER 01</small>
+      <b id="s-name">极限与连续</b>
+      <span id="s-sub">ε-N 语言 · 收敛准则</span>
+    </div>
+    <div class="stage-ctrl">
+      <button id="s-prev" title="上一个">←</button>
+      <button id="s-open" title="进入章节" style="width:auto;border-radius:999px;padding:0 22px;font-size:13px;letter-spacing:.1em">进入本章</button>
+      <button id="s-next" title="下一个">→</button>
+    </div>
+  </div>
+
+  <div style="position:absolute;left:50%;top:118px;transform:translateX(-50%);font-size:11px;letter-spacing:.3em;color:var(--text-3)">拖动 / 滚轮 切换 · 点击模型进入章节</div>
+</div>
+
+<script src="content/chapters.js"></script>
+<script src="js/site.js"></script>
+<script type="module" src="js/gallery.js"></script>
+</body>
+</html>
