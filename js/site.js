@@ -33,17 +33,26 @@
   document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
 
   /* 章节卡片 */
+  const THUMB = {
+    1: 'ch_limit_rings', 2: 'ch_partial_saddle', 3: 'ch_integral_solid',
+    4: 'ex_catenoid', 5: 'ex_archimedean', 6: 'ex_gyroid',
+    7: 'ex_hyperboloid', 8: 'ch_line_helix', 9: 'ex_standing_wave', 10: 'ch_ode_flow',
+  };
   const grid = document.getElementById('ch-grid');
   if (grid && S) {
     grid.innerHTML = S.chapters.map((c) => {
       const live = c.status === 'live';
-      return `<a class="ch-card reveal" href="chapter.html?c=${c.id}">
-        <div class="ch-no">CHAPTER ${c.no}</div>
-        <div class="ch-name">${c.name}</div>
-        <div class="ch-sub">${c.sub}</div>
-        <div class="ch-foot">
-          <span class="ch-status ${live ? 'live' : ''}">${live ? '● 已上线' : '○ 待补全'}</span>
-          <span class="ch-arrow">→</span>
+      const th = THUMB[c.id] || 'hero_mobius';
+      return `<a class="ch-card reveal" href="chapter.html?id=${c.id}">
+        <div class="ch-thumb"><img src="assets/thumbs/${th}.png" alt="${c.name}" loading="lazy"></div>
+        <div class="ch-body">
+          <div class="ch-no">CHAPTER ${c.no}</div>
+          <div class="ch-name">${c.name}</div>
+          <div class="ch-sub">${c.sub}</div>
+          <div class="ch-foot">
+            <span class="ch-status ${live ? 'live' : ''}">${live ? '● 已上线' : '○ 待补全'}</span>
+            <span class="ch-arrow">→</span>
+          </div>
         </div>
       </a>`;
     }).join('');

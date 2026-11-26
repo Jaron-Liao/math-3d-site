@@ -29,6 +29,7 @@
 </nav>
 
 <header class="hero">
+  <div class="hero-stage"><img src="assets/env/floor.png" alt=""></div>
   <canvas id="hero-canvas"></canvas>
   <div class="hero-veil"></div>
   <div class="hero-inner">
@@ -150,11 +151,13 @@
   function draw() {
     var list = cur === '全部' ? M : (window.MODEL_CATS[cur] || []);
     grid.innerHTML = list.map(function (m) {
+      var base = (m.file || '').replace(/^models\//, '').replace(/\.(gltf|glb)$/, '');
       return '<a class="m-card" href="model.html?id=' + m.id + '">'
-        + '<div class="mc-cat">' + m.cat + '</div>'
+        + '<div class="mc-thumb"><img src="assets/thumbs/' + base + '.png" alt="' + m.name + '" loading="lazy"></div>'
+        + '<div class="mc-body"><div class="mc-cat">' + m.cat + '</div>'
         + '<div class="mc-name">' + m.name + '</div>'
         + '<div class="mc-en">' + m.en + '</div>'
-        + '<div class="mc-tags">' + (m.tags || []).map(function (t) { return '<span>' + t + '</span>'; }).join('') + '</div>'
+        + '<div class="mc-tags">' + (m.tags || []).map(function (t) { return '<span>' + t + '</span>'; }).join('') + '</div></div>'
         + '</a>';
     }).join('');
   }

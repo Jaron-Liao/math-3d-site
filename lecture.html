@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>讲义索引 · 高等数学 3D</title>
+<title>讲义 · 高等数学 3D</title>
 <link rel="stylesheet" href="assets/katex/katex-inline.css">
 <link rel="stylesheet" href="css/site.css">
 <script type="importmap">
 { "imports": { "three": "./assets/three.module.min.js", "three/addons/": "./assets/jsm/" } }
 </script>
 </head>
-<body>
+<body class="page-lecture">
 
 <nav class="nav solid">
   <div class="nav-logo"><a href="index.html" style="color:inherit"><b>高等数学</b></a><span>LECTURES</span></div>
@@ -24,12 +24,30 @@
   <a class="nav-gh" data-repo href="#" target="_blank" rel="noopener">GitHub ↗</a>
 </nav>
 
-<section class="sec" style="padding-top:104px">
-  <div class="sec-head reveal">
-    <h2 class="sec-title"><small>Chapters</small>十章主线，一条脉络</h2>
-    <p class="sec-desc">从数列极限出发，经导数、积分、级数，抵达常微分方程。每章独立成页，配一座对应的 3D 模型。</p>
+<header class="lec-hero">
+  <div class="lec-hero-bg">
+    <img src="assets/env/floor.png" alt="">
   </div>
-  <div class="ch-grid" id="ch-grid"></div>
+  <div class="lec-hero-in">
+    <div class="hero-eyebrow">Ten Chapters · One Line</div>
+    <h1>一条主线，<br><em>十章</em>纵深</h1>
+    <p class="lec-sub">从 ε-N 的第一次量化，到常微分方程的向量场。每章一座 Blender 模型，正文独立成页。</p>
+    <div class="lec-stats">
+      <span><b>10</b>章正文</span>
+      <span><b>3</b>章已完稿</span>
+      <span><b>20</b>座模型</span>
+      <span><b>KaTeX</b>排版</span>
+    </div>
+    <a class="btn primary" href="chapter.html?id=1">从第一章开始 →</a>
+  </div>
+</header>
+
+<section class="lec-sec">
+  <div class="lec-sec-head reveal">
+    <h2>章节目录</h2>
+    <p>点击任意一行进入正文；右侧为该章的 3D 模型渲染。</p>
+  </div>
+  <div class="lec-list" id="lec-list"></div>
 </section>
 
 <footer class="foot">
@@ -38,25 +56,41 @@
 </footer>
 
 <script src="content/chapters.js"></script>
+<script src="content/models.js"></script>
 <script src="assets/katex/katex.min.js"></script>
 <script src="assets/katex/contrib/auto-render.min.js"></script>
 <script src="js/site.js"></script>
 <script>
 (function () {
-  var S = window.SITE, grid = document.getElementById('ch-grid');
-  grid.innerHTML = S.chapters.map(function (c) {
+  var S = window.SITE;
+  // 章节 -> 缩略图（取对应模型的 Blender 渲染）
+  var THUMB = {
+    1: 'ch_limit_rings', 2: 'ch_partial_saddle', 3: 'ch_integral_solid',
+    4: 'ex_catenoid', 5: 'ex_archimedean', 6: 'ex_gyroid',
+    7: 'ex_hyperboloid', 8: 'ch_line_helix', 9: 'ex_standing_wave', 10: 'ch_ode_flow'
+  };
+  var list = document.getElementById('lec-list');
+  list.innerHTML = S.chapters.map(function (c) {
     var live = c.status === 'live';
-    return '<a class="ch-card" href="chapter.html?id=' + c.id + '">'
-      + '<span class="ch-no">' + c.no + ' / ' + c.en + '</span>'
-      + '<div class="ch-name">' + c.name + '</div>'
-      + '<p class="ch-sub">' + c.sub + '</p>'
-      + '<div class="ch-foot"><span class="ch-status' + (live ? ' live' : '') + '">' + (live ? '● 已完稿' : '○ 骨架') + '</span><span class="ch-arrow">进入阅读 →</span></div>'
+    var t = THUMB[c.id] || 'hero_mobius';
+    return '<a class="lec-row reveal" href="chapter.html?id=' + c.id + '">'
+      + '<div class="lec-idx">' + c.no + '</div>'
+      + '<div class="lec-info">'
+      +   '<div class="lec-en">' + c.en + '</div>'
+      +   '<h3>' + c.name + '</h3>'
+      +   '<p>' + c.sub + '</p>'
+      +   '<div class="lec-meta"><span class="' + (live ? 'live' : '') + '">' + (live ? '● 已完稿' : '○ 骨架待补') + '</span>'
+      +     '<span>' + (c.sections.length || '—') + ' 节</span><span>' + (c.formulas.length || '—') + ' 公式</span>'
+      +     '<span class="lec-go">进入阅读 →</span></div>'
+      + '</div>'
+      + '<div class="lec-thumb"><img src="assets/thumbs/' + t + '.png" alt="' + c.name + '" loading="lazy"></div>'
       + '</a>';
   }).join('');
+  document.querySelectorAll('.reveal').forEach(function (el, i) {
+    setTimeout(function () { el.classList.add('in'); }, 60 * i);
+  });
   var y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
-  if (window.renderMathInElement) renderMathInElement(document.body, { delimiters: [{ left: '$', right: '$', display: false }], throwOnError: false });
 })();
 </script>
-<script>document.querySelectorAll(".reveal").forEach(function(el){el.classList.add("in")});</script>
 </body>
 </html>
