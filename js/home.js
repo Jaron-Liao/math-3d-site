@@ -77,7 +77,7 @@ function buildCloud(v) {
   const geo = new THREE.BufferGeometry();
   geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   const mat = new THREE.PointsMaterial({
-    color: col(v.pal.b), size: 0.022, transparent: true, opacity: 0.95,
+    color: col(v.pal.b), size: 0.032, transparent: true, opacity: 1,
     depthWrite: false, blending: THREE.AdditiveBlending,
   });
   const pts = new THREE.Points(geo, mat);
@@ -159,7 +159,7 @@ function buildShards(v) {
   const count = 260;
   const geo = new THREE.TetrahedronGeometry(0.12, 0);
   const mat = new THREE.MeshStandardMaterial({
-    color: col(v.pal.a), metalness: 0.7, roughness: 0.28, envMapIntensity: 1.3, emissive: col(v.pal.c), emissiveIntensity: 0.2,
+    color: col(v.pal.a), metalness: 0.7, roughness: 0.28, envMapIntensity: 1.6, emissive: col(v.pal.c), emissiveIntensity: 0.34,
   });
   const inst = new THREE.InstancedMesh(geo, mat, count);
   const data = [];
@@ -281,7 +281,7 @@ function buildRings(v) {
 /* ── 原型 8：流场 ── */
 function buildField(v) {
   const g = new THREE.Group();
-  const N = 520;
+  const N = 900;
   const pos = new Float32Array(N * 6);
   const seeds = [];
   for (let i = 0; i < N; i++) {
@@ -295,12 +295,12 @@ function buildField(v) {
   const geo = new THREE.BufferGeometry();
   geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   const mat = new THREE.LineBasicMaterial({
-    color: col(v.pal.b), transparent: true, opacity: 0.55, blending: THREE.AdditiveBlending,
+    color: col(v.pal.b).lerp(new THREE.Color('#ffffff'), 0.25), transparent: true, opacity: 0.85, blending: THREE.AdditiveBlending,
   });
   const lines = new THREE.LineSegments(geo, mat);
   lines.position.x = 1.15;
   g.add(lines);
-  const len = 0.16 + v.amp * 0.1;
+  const len = 0.24 + v.amp * 0.14;
   return {
     group: g,
     tick(t) {
@@ -359,13 +359,13 @@ function buildBlob(v) {
 function buildGrid(v) {
   const g = new THREE.Group();
   const size = 26;
-  const grid = new THREE.GridHelper(size, 52, col(v.pal.c).getHex(), col(v.pal.c).multiplyScalar(0.6).getHex());
+  const grid = new THREE.GridHelper(size, 52, col(v.pal.b).getHex(), col(v.pal.c).multiplyScalar(1.6).getHex());
   grid.position.set(1.1, -1.6, 0);
   g.add(grid);
 
   const floor = new THREE.Mesh(
     new THREE.PlaneGeometry(size, size),
-    new THREE.MeshStandardMaterial({ color: col(v.pal.c).multiplyScalar(0.5), metalness: 0.9, roughness: 0.22 }),
+    new THREE.MeshStandardMaterial({ color: col(v.pal.c).multiplyScalar(1.4), metalness: 0.5, roughness: 0.45, emissive: col(v.pal.c), emissiveIntensity: 0.22 }),
   );
   floor.rotation.x = -Math.PI / 2;
   floor.position.set(1.1, -1.62, 0);
