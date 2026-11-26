@@ -7,6 +7,9 @@ const hud = document.getElementById('hero-hud');
 const fade = document.getElementById('hero-fade');
 const qs = new URLSearchParams(location.search);
 const ROTATE_SEC = Math.max(5, Number(qs.get('rotate')) || 60);
+/* 移动端 / 小屏降级：减少粒子量、关闭后期特效，保证帧率 */
+const LOW_END = window.matchMedia('(max-width: 760px)').matches
+  || (navigator.hardwareConcurrency || 8) <= 4;
 
 function col(hex, mul) {
   const c = new THREE.Color(hex);
@@ -60,7 +63,7 @@ async function buildGLB(v) {
 
 /* ── 原型 2：粒子云（球 ↔ 环 ↔ 螺旋 形变） ── */
 function buildCloud(v) {
-  const N = 6200;
+  const N = LOW_END ? 2800 : 6200;
   const g = new THREE.Group();
   const pos = new Float32Array(N * 3);
   const sph = [], tor = [], hel = [];
@@ -281,7 +284,7 @@ function buildRings(v) {
 /* ── 原型 8：流场 ── */
 function buildField(v) {
   const g = new THREE.Group();
-  const N = 900;
+  const N = LOW_END ? 420 : 900;
   const pos = new Float32Array(N * 6);
   const seeds = [];
   for (let i = 0; i < N; i++) {
@@ -407,7 +410,7 @@ function boot() {
 
   const stage = createStage(canvas, {
     alpha: true, fov: 34, camPos: [2.5, 0.95, 5.9], lookAt: [1.25, 0, 0], exposure: 1.1,
-    postfx: { bloomStrength: 0.30, bloomThreshold: 0.94 },
+    postfx: LOW_END ? false : { bloomStrength: 0.30, bloomThreshold: 0.94 },
   });
   const { scene, camera } = stage;
   scene.add(starField(760, 11));
