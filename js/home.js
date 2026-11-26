@@ -229,7 +229,7 @@ function buildRibbon(v) {
   }));
   mesh.position.x = 1.15;
   mesh.rotation.set(0.35, 1.05, 0);
-  mesh.scale.setScalar(0.82);
+  mesh.scale.setScalar(0.95);
   g.add(mesh);
   return {
     group: g,

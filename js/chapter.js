@@ -90,6 +90,13 @@ document.getElementById('c-pager').innerHTML = [
   next ? `<a href="chapter.html?c=${next.id}">${next.name} · 下一章 →</a>` : '<a href="index.html#notes">返回目录 →</a>',
 ].join('');
 
+/* 键盘翻章：← → */
+window.addEventListener('keydown', (e) => {
+  if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName || '')) return;
+  if (e.key === 'ArrowRight' && next) location.href = 'chapter.html?c=' + next.id;
+  else if (e.key === 'ArrowLeft' && prev) location.href = 'chapter.html?c=' + prev.id;
+});
+
 /* ── 3D ── */
 const canvas = document.getElementById('c-canvas');
 const capTitle = document.getElementById('c-model-title');
