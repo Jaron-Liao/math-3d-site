@@ -160,7 +160,7 @@ window.SITE = {
     {
       id: 3, no: '03', name: '定积分与应用', en: 'DEFINITE INTEGRAL',
       sub: '分割求和 · 基本定理 · 换元分部 · 旋转体与弧长',
-      model: 'models/ex_exponential_funnel.glb',
+      model: 'models/ex_exponential_funnel.gltf',
       modelCap: '旋转体：$e^{-x}$ 曲线绕轴旋转扫出的喇叭面，体积元 $\\mathrm dV=\\pi f^{2}(x)\\,\\mathrm dx$',
       status: 'live',
       lead: '积分是"无限细分后求和"的极限。它把局部信息累加成整体量——面积、体积、弧长、功，全部是同一套分割—近似—求和—取极限的产物。',
@@ -217,7 +217,7 @@ window.SITE = {
     {
       id: 4, no: '04', name: '微分中值定理', en: 'MEAN VALUE THEOREMS',
       sub: '罗尔 · 拉格朗日 · 柯西 · 泰勒公式',
-      model: 'models/ex_klein_bottle.glb',
+      model: 'models/ex_klein_bottle.gltf',
       modelCap: '中值定理把"整段的平均"压到"某一点"，就像曲面上的整体弯曲必在某处等于切平面的斜率',
       status: 'live',
       lead: '中值定理是"整体—局部"的翻译器：它把一段区间上的平均变化率，兑换成某个内点处的瞬时变化率。所有不等式证明、根的估计、泰勒展开，都建立在这个兑换上。',
@@ -288,7 +288,7 @@ window.SITE = {
     {
       id: 5, no: '05', name: '不定积分', en: 'INDEFINITE INTEGRAL',
       sub: '原函数 · 凑微分 · 三角代换 · 分部 · 有理函数',
-      model: 'models/ex_archimedean.glb',
+      model: 'models/ex_archimedean.gltf',
       modelCap: '阿基米德螺线：极坐标下的弧长与面积，是最能体现"换元"威力的曲线',
       status: 'live',
       lead: '求原函数没有通用算法，只有一套"识别信号 → 选配方"的策略。真正要练的不是公式量，而是看被积式就知道该用哪一招。',
@@ -361,7 +361,7 @@ window.SITE = {
     {
       id: 6, no: '06', name: '多元函数微分', en: 'MULTIVARIABLE CALCULUS',
       sub: '偏导 · 全微分 · 方向导数 · 极值',
-      model: 'models/ex_gradient_terrain.glb',
+      model: 'models/ex_gradient_terrain.gltf',
       modelCap: '梯度地形：每一点的坡度方向就是该处导数向量，最陡上坡即梯度的几何意义',
       status: 'live',
       lead: '多维情形下"可微"强于"偏导存在"，切平面取代切线成为局部线性化的载体。所有概念都在回答一个问题：沿不同方向，函数怎么变？',
@@ -569,7 +569,7 @@ window.SITE = {
     {
       id: 9, no: '09', name: '无穷级数', en: 'INFINITE SERIES',
       sub: '正项级数 · 幂级数 · 傅里叶',
-      model: 'models/ex_standing_wave.glb',
+      model: 'models/ex_standing_wave.gltf',
       modelCap: '驻波：有限项叠加出波形，无穷项傅里叶级数能把任意周期信号分解为正弦之和',
       status: 'live',
       lead: '级数是"离散的积分"：把加法推到无穷后的收敛理论。两条主线贯穿全章——判别收敛（比较/比值/根值），以及把函数展开成幂级数或傅里叶级数。',
