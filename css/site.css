@@ -160,7 +160,7 @@ body::after {
   position: relative; border: 1px solid var(--line); border-radius: 18px; overflow: hidden;
   background: #0E0C08; min-height: 460px;
 }
-.canvas-shell canvas { display: block; width: 100%; height: 100%; }
+.canvas-shell canvas { display: block; position: absolute; inset: 0; width: 100%; height: 100%; }
 .canvas-tag {
   position: absolute; left: 16px; top: 14px; font-family: var(--mono); font-size: 11px;
   color: var(--gold-dk); letter-spacing: .1em; pointer-events: none;
@@ -169,9 +169,15 @@ body::after {
   position: absolute; right: 16px; bottom: 12px; font-size: 11px; color: var(--text-3);
   letter-spacing: .1em; pointer-events: none;
 }
-.lab-panel { border: 1px solid var(--line); border-radius: 18px; padding: 24px; background: var(--panel); }
-.lab-panel h3 { font-family: var(--serif); font-size: 19px; margin: 0 0 6px; font-weight: 600; }
+.lab-panel { border: 1px solid var(--line); border-radius: 18px; padding: 24px; background: var(--panel); max-height: 78vh; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--gold-dk) transparent; }
+.lab-panel h3 { font-family: var(--serif); font-size: 19px; margin: 0 0 6px; font-weight: 600; display: flex; justify-content: space-between; align-items: baseline; }
+.p-count { font-family: var(--sans); font-size: 11px; color: var(--gold-dk); letter-spacing: .1em; font-weight: 400; }
 .lab-panel p { color: var(--text-3); font-size: 12.5px; margin: 0 0 20px; }
+.p-group { border-top: 1px solid var(--line); padding: 12px 0 4px; margin-top: 6px; }
+.p-group summary { cursor: pointer; color: var(--gold-lt); font-size: 12.5px; letter-spacing: .1em; padding: 4px 0 10px; list-style: none; }
+.p-group summary::-webkit-details-marker { display: none; }
+.p-group summary::before { content: "▸ "; color: var(--gold-dk); }
+.p-group[open] summary::before { content: "▾ "; }
 .ctl { margin-bottom: 20px; }
 .ctl label { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--text-2); margin-bottom: 8px; letter-spacing: .06em; }
 .ctl label b { font-family: var(--mono); color: var(--gold); font-weight: 400; }
@@ -211,6 +217,32 @@ input[type=range]::-webkit-slider-thumb {
 .bars-row b { font-family: var(--mono); font-size: 12.5px; color: var(--gold); text-align: right; font-weight: 400; }
 @keyframes grow { from { transform: scaleX(0); } }
 .bars-src { margin-top: 18px; color: var(--text-3); font-size: 11.5px; }
+
+/* ── 模型详情页切换列表 ── */
+.m-list { display: flex; flex-direction: column; gap: 6px; max-height: 420px; overflow-y: auto; margin-top: 14px; }
+.m-item {
+  display: flex; align-items: center; gap: 14px; padding: 10px 14px;
+  border: 1px solid var(--line); border-radius: 10px; color: var(--text-2);
+  transition: border-color .22s, background .22s, color .22s;
+}
+.m-item:hover { border-color: var(--line-2); color: var(--gold-lt); background: rgba(212,175,55,.06); }
+.m-item.on { border-color: var(--gold); color: var(--gold-lt); background: rgba(212,175,55,.10); }
+.m-item span { font-family: var(--mono); font-size: 11px; color: var(--gold-dk); letter-spacing: .1em; }
+.m-item b { font-family: var(--serif); font-size: 15px; font-weight: 500; }
+
+/* ── 独立页导流卡（首页 Explore） ── */
+.link-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+.link-card {
+  display: flex; flex-direction: column; gap: 10px; padding: 26px 26px 24px;
+  border: 1px solid var(--line); border-radius: 16px;
+  background: linear-gradient(160deg, rgba(32,27,20,.72), rgba(14,12,9,.55));
+  transition: border-color .28s, transform .28s, background .28s;
+}
+.link-card:hover { border-color: var(--line-2); transform: translateY(-4px); background: linear-gradient(160deg, rgba(48,40,24,.78), rgba(18,15,10,.6)); }
+.lc-tag { font-size: 11px; letter-spacing: .32em; color: var(--gold-dk); }
+.link-card b { font-family: var(--serif); font-size: 24px; color: #F3ECDD; font-weight: 600; }
+.link-card p { margin: 0; color: var(--text-3); font-size: 13.5px; line-height: 1.7; }
+.lc-go { margin-top: 6px; color: var(--gold); font-size: 13px; letter-spacing: .1em; }
 
 /* ── 关于 / 页脚 ── */
 .about-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: start; }
@@ -320,3 +352,34 @@ input[type=range]::-webkit-slider-thumb {
   .article { padding: 92px 20px 60px; }
   .bars-row { grid-template-columns: 100px 1fr 54px; }
 }
+
+/* ── 模型墙 ── */
+.m-filter { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+.m-filter button {
+  background: transparent; border: 1px solid var(--line); color: var(--text-2);
+  border-radius: 999px; padding: 7px 16px; font-size: 12.5px; cursor: pointer;
+  transition: all .2s; font-family: var(--sans);
+}
+.m-filter button:hover { border-color: var(--line-2); color: var(--gold-lt); }
+.m-filter button.on { background: rgba(212,175,55,.12); border-color: var(--gold); color: var(--gold-lt); }
+.m-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(212px, 1fr)); gap: 14px; }
+.m-card {
+  position: relative; display: block; padding: 20px 18px 16px;
+  border: 1px solid var(--line); border-radius: 14px;
+  background: linear-gradient(160deg, rgba(32,27,20,.78), rgba(14,12,9,.62));
+  transition: transform .3s, border-color .3s, box-shadow .3s;
+}
+.m-card:hover { transform: translateY(-4px); border-color: var(--line-2); box-shadow: 0 18px 50px -30px #000; }
+.mc-cat { font-size: 11px; letter-spacing: .2em; color: var(--gold-dk); }
+.mc-name { font-family: var(--serif); font-size: 19px; margin: 8px 0 2px; color: #F3ECDD; }
+.mc-en { font-size: 11.5px; color: var(--text-3); letter-spacing: .04em; }
+.mc-tags { margin-top: 12px; display: flex; gap: 6px; flex-wrap: wrap; }
+.mc-tags span { font-size: 10.5px; color: var(--text-3); border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; }
+
+/* ── 实验室：模型库选择 ── */
+select.pick {
+  width: 100%; background: var(--panel); color: var(--text);
+  border: 1px solid var(--line); border-radius: 9px; padding: 9px 10px;
+  font-size: 12.5px; font-family: var(--sans); outline: none;
+}
+select.pick:focus { border-color: var(--gold-dk); }

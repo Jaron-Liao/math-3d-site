@@ -132,7 +132,7 @@ async function boot3D() {
     const t = clock.getElapsedTime();
     controls.autoRotateSpeed = 0.85 + Math.sin(t * 0.3) * 0.15;
     controls.update();
-    renderer.render(scene, camera);
+    stage.draw(t);
   });
 }
 boot3D();

@@ -1,6 +1,7 @@
 /* 共用 3D 舞台：渲染器 / 环境光照 / 模型加载 / 自适应 */
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { createPostFX } from './postfx.js';
 
 /** 生成一张程序化环境贴图（黑金影棚），让金属材质有反射 */
 function studioEnv(renderer) {
@@ -56,6 +57,9 @@ export function createStage(canvas, opts = {}) {
   const amb = new THREE.HemisphereLight(0xffe3ad, 0x0a0906, 0.55);
   scene.add(key, rim, amb);
 
+  // 后期：Bloom + 暗角 + 颗粒 + 色散（opts.postfx = false 可关闭）
+  const post = opts.postfx === false ? null : createPostFX(renderer, scene, camera, opts.postfx || {});
+
   function resize() {
     const host = canvas.parentElement || canvas;
     const w = Math.max(1, host.clientWidth);
@@ -63,13 +67,19 @@ export function createStage(canvas, opts = {}) {
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
+    if (post) post.setSize(w, h);
   }
   resize();
   const ro = new ResizeObserver(resize);
   ro.observe(canvas.parentElement || canvas);
   window.addEventListener('resize', resize);
 
-  return { renderer, scene, camera, key, rim, amb, resize, dispose: () => ro.disconnect() };
+  function draw(t) {
+    if (post) post.render(t);
+    else renderer.render(scene, camera);
+  }
+
+  return { renderer, scene, camera, key, rim, amb, post, resize, draw, dispose: () => ro.disconnect() };
 }
 
 const loader = new GLTFLoader();
@@ -89,7 +99,7 @@ export async function loadModel(path, targetSize = 2.6) {
     if (o.isMesh) {
       o.castShadow = false; o.receiveShadow = false;
       if (o.material) {
-        o.material.envMapIntensity = 1.25;
+        o.material.envMapIntensity = 1.45;
         o.material.side = THREE.DoubleSide;
       }
     }

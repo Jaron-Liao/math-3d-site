@@ -1,9 +1,9 @@
-/* 3D 展厅：封面流式排列（中间放大、两侧后退），拖拽/滚轮切换，点击进入章节 */
+/* 3D 展厅：20 座模型封面流，拖拽/滚轮切换，点击进入章节或模型详情 */
 import * as THREE from 'three';
 import { createStage, loadModel, starField, webglOK } from './core.js';
 
-const S = window.SITE;
-const n = S.chapters.length;
+const M = window.MODELS || [];
+const n = M.length;
 const canvas = document.getElementById('stage-canvas');
 
 const ui = {
@@ -13,11 +13,10 @@ const ui = {
   dots: document.getElementById('dots'),
 };
 
-let cur = 0;          // 连续索引（拖动时为小数）
-let target = 0;       // 吸附目标
+let cur = 0;
+let target = 0;
 let dragging = false;
 
-/* 最短环形距离：-n/2 .. n/2 */
 function offsetOf(i) {
   let d = (i - cur) % n;
   if (d > n / 2) d -= n;
@@ -26,7 +25,7 @@ function offsetOf(i) {
 }
 
 function buildDots() {
-  ui.dots.innerHTML = S.chapters.map((c, i) => `<i data-i="${i}" class="${i === 0 ? 'on' : ''}"></i>`).join('');
+  ui.dots.innerHTML = M.map((m, i) => `<i data-i="${i}" class="${i === 0 ? 'on' : ''}" title="${m.name}"></i>`).join('');
   ui.dots.querySelectorAll('i').forEach((d) => {
     d.addEventListener('click', () => go(Number(d.dataset.i)));
   });
@@ -34,12 +33,12 @@ function buildDots() {
 
 function syncUI(i) {
   const idx = ((i % n) + n) % n;
-  const c = S.chapters[idx];
-  ui.kicker.textContent = 'CHAPTER ' + c.no;
-  ui.name.textContent = c.name;
-  ui.sub.textContent = c.sub;
+  const m = M[idx];
+  ui.kicker.textContent = m.cat + ' · ' + m.en;
+  ui.name.textContent = m.name;
+  ui.sub.textContent = m.desc;
   ui.dots.querySelectorAll('i').forEach((d, k) => d.classList.toggle('on', k === idx));
-  document.title = c.name + ' · 3D 展厅';
+  document.title = m.name + ' · 3D 展厅';
 }
 
 function go(i) {
@@ -57,12 +56,15 @@ function placeholder(color) {
 }
 
 async function boot() {
-  if (!canvas || !webglOK()) {
-    ui.name.textContent = '当前浏览器不支持 WebGL';
+  if (!canvas || !webglOK() || !n) {
+    if (ui.name) ui.name.textContent = '当前浏览器不支持 WebGL';
     return;
   }
-  const stage = createStage(canvas, { fov: 40, camPos: [0, 1.1, 9.0], lookAt: [0, 0, 0], fog: [10, 34], exposure: 1.02 });
-  const { scene, camera, renderer } = stage;
+  const stage = createStage(canvas, {
+    fov: 40, camPos: [0, 1.1, 9.0], lookAt: [0, 0, 0], fog: [10, 34], exposure: 1.02,
+    postfx: { bloomStrength: 0.78, bloomThreshold: 0.7 },
+  });
+  const { scene, camera } = stage;
 
   scene.add(starField(1100, 15));
 
@@ -70,29 +72,24 @@ async function boot() {
   scene.add(group);
 
   const slots = [];
-  S.chapters.forEach((c, i) => {
+  M.forEach((m, i) => {
     const holder = new THREE.Group();
-    holder.userData.chapterId = c.id;
+    holder.userData.href = m.ch ? 'chapter.html?c=' + m.ch : 'model.html?id=' + m.id;
     group.add(holder);
     slots.push({ holder });
 
-    if (c.model) {
-      loadModel(c.model, 2.35).then((m) => {
-        m.userData.chapterId = c.id;
-        holder.add(m);
-      }).catch((e) => {
-        console.warn('[gallery] 加载失败', c.model, e);
-        holder.add(placeholder(0xd4af37));
-      });
-    } else {
-      holder.add(placeholder(0x8a7226));
-    }
+    loadModel(m.file, 1.6).then((obj) => {
+      obj.userData.href = holder.userData.href;
+      holder.add(obj);
+    }).catch((e) => {
+      console.warn('[gallery] 加载失败', m.file, e);
+      holder.add(placeholder(0xd4af37));
+    });
   });
 
   buildDots();
   syncUI(0);
 
-  /* 首帧摆位，避免全部堆在原点 */
   slots.forEach((s, i) => {
     const d = offsetOf(i);
     s.holder.position.set(d * 2.55, 0, -Math.abs(d) * 1.5);
@@ -103,19 +100,19 @@ async function boot() {
   document.getElementById('s-next').addEventListener('click', () => go(Math.round(target) + 1));
   document.getElementById('s-open').addEventListener('click', () => {
     const idx = ((Math.round(target) % n) + n) % n;
-    location.href = 'chapter.html?c=' + S.chapters[idx].id;
+    const m = M[idx];
+    location.href = m.ch ? 'chapter.html?c=' + m.ch : 'model.html?id=' + m.id;
   });
 
   let wheelLock = 0;
   canvas.addEventListener('wheel', (e) => {
     e.preventDefault();
     const now = performance.now();
-    if (now - wheelLock < 380) return;
+    if (now - wheelLock < 420) return;
     wheelLock = now;
     go(Math.round(target) + (e.deltaY > 0 ? 1 : -1));
   }, { passive: false });
 
-  /* 拖拽与点击 */
   const ray = new THREE.Raycaster();
   const ndc = new THREE.Vector2();
   let startX = 0, startCur = 0, moved = 0;
@@ -140,8 +137,8 @@ async function boot() {
       const hits = ray.intersectObjects(group.children, true);
       for (const h of hits) {
         let o = h.object;
-        while (o && !o.userData.chapterId) o = o.parent;
-        if (o && o.userData.chapterId) { location.href = 'chapter.html?c=' + o.userData.chapterId; return; }
+        while (o && !o.userData.href) o = o.parent;
+        if (o && o.userData.href) { location.href = o.userData.href; return; }
       }
     } else {
       target = Math.round(cur);
@@ -150,7 +147,7 @@ async function boot() {
   });
 
   const clock = new THREE.Clock();
-  renderer.setAnimationLoop(() => {
+  stage.renderer.setAnimationLoop(() => {
     const t = clock.getElapsedTime();
 
     if (!dragging) cur += (target - cur) * 0.09;
@@ -168,15 +165,15 @@ async function boot() {
       s.holder.position.z += (tz - s.holder.position.z) * 0.14;
       s.holder.rotation.y = -d * 0.26;
 
-      const sc = ad < 0.5 ? 1 : Math.max(0.52, 1 - (ad - 0.5) * 0.34);
+      const sc = ad < 0.5 ? 1 : Math.max(0.5, 1 - (ad - 0.5) * 0.34);
       s.holder.scale.setScalar(sc);
-      s.holder.visible = ad <= 2.6;
+      s.holder.visible = ad <= 2.8;
     });
 
     camera.position.x = Math.sin(t * 0.18) * 0.35;
     camera.position.y = 1.1 + Math.sin(t * 0.24) * 0.05;
     camera.lookAt(0, 0, 0);
-    renderer.render(scene, camera);
+    stage.draw(t);
   });
 }
 

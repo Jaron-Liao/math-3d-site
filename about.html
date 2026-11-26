@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>关于本站 · 高等数学 3D</title>
+<link rel="stylesheet" href="assets/katex/katex-inline.css">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+
+<nav class="nav solid">
+  <div class="nav-logo"><a href="index.html" style="color:inherit"><b>高等数学</b></a><span>ABOUT</span></div>
+  <div class="nav-links">
+    <a href="lecture.html">讲义</a>
+    <a href="lab.html">实验室</a>
+    <a href="gallery.html">3D 展厅</a>
+    <a href="data.html">数据洞察</a>
+    <a href="about.html" class="on">关于</a>
+  </div>
+  <a class="nav-gh" data-repo href="#" target="_blank" rel="noopener">GitHub ↗</a>
+</nav>
+
+<section class="sec" style="padding-top:104px">
+  <div class="sec-head reveal">
+    <h2 class="sec-title"><small>About</small>关于这个站点</h2>
+  </div>
+  <div class="about-grid reveal">
+    <div>
+      <p>这不是一份静态讲义的换皮。每一章的 3D 模型都由 Blender 5.3 以参数曲面脚本生成，导出为 glTF，再由 Three.js 在浏览器里实时布光、着色、旋转。模型的几何参数与章节内容一一对应：ε 环带的半径序列就是 <span>$|a_n-A|&lt;\varepsilon$</span> 的收紧过程。</p>
+      <p>正文保持数学的完整度：定义、证明思路、可复用套路、以及最容易出错的地方，都以独立卡片呈现。公式由 KaTeX 排版，与纸质教材的规范一致。</p>
+      <p>每个展示项——讲义章节、数据洞察、3D 模型——都拥有独立页面，点击直达，不再需要在一页内反复下滑寻找。</p>
+    </div>
+    <dl class="kv">
+      <dt>技术栈</dt><dd>Three.js · KaTeX · 原生 ES Modules</dd>
+      <dt>3D 生成</dt><dd>Blender 5.3 参数曲面脚本 → glTF (GLB)</dd>
+      <dt>部署</dt><dd>GitHub Pages · 纯静态</dd>
+      <dt>数据层</dt><dd>content/chapters.js 单一数据源</dd>
+      <dt>仓库</dt><dd><a data-repo href="#" target="_blank" rel="noopener">GitHub ↗</a></dd>
+    </dl>
+  </div>
+</section>
+
+<footer class="foot">
+  <span>© <span id="year"></span> 高等数学 · 3D Edition</span>
+  <a href="index.html">← 返回首页</a>
+</footer>
+
+<script src="content/chapters.js"></script>
+<script src="assets/katex/katex.min.js"></script>
+<script src="assets/katex/contrib/auto-render.min.js"></script>
+<script src="js/site.js"></script>
+<script>
+(function () {
+  var y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear();
+  if (window.renderMathInElement) renderMathInElement(document.body, { delimiters: [{left:'$',right:'$',display:false}], throwOnError:false });
+})();
+</script>
+<script>document.querySelectorAll(".reveal").forEach(function(el){el.classList.add("in")});</script>
+</body>
+</html>

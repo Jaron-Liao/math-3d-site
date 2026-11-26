@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3D 模型详情 · 高等数学</title>
+<link rel="stylesheet" href="assets/katex/katex-inline.css">
+<link rel="stylesheet" href="css/site.css">
+<script type="importmap">
+{ "imports": { "three": "./assets/three.module.min.js", "three/addons/": "./assets/jsm/" } }
+</script>
+</head>
+<body>
+
+<nav class="nav solid">
+  <div class="nav-logo"><a href="index.html" style="color:inherit"><b>高等数学</b></a><span>3D MODEL</span></div>
+  <div class="nav-links">
+    <a href="lecture.html">讲义</a>
+    <a href="lab.html">实验室</a>
+    <a href="gallery.html" class="on">3D 展厅</a>
+    <a href="data.html">数据洞察</a>
+    <a href="about.html">关于</a>
+  </div>
+  <a class="nav-gh" data-repo href="#" target="_blank" rel="noopener">GitHub ↗</a>
+</nav>
+
+<section class="sec" style="padding-top:104px">
+  <div class="sec-head">
+    <h2 class="sec-title"><small id="m-kicker">MODEL</small><span id="m-title">模型详情</span></h2>
+    <p class="sec-desc" id="m-cap">加载中…</p>
+  </div>
+  <div class="lab-wrap">
+    <div class="canvas-shell" style="min-height:520px">
+      <canvas id="m-canvas"></canvas>
+      <div class="canvas-hint">拖动旋转 · 滚轮缩放</div>
+    </div>
+    <div class="lab-panel">
+      <h3>模型切换</h3>
+      <p>共 <b id="m-count">0</b> 座模型，点击切换即时预览。</p>
+      <div class="m-list" id="m-list"></div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <span>© <span id="year"></span> 高等数学 · 3D Edition</span>
+  <a href="gallery.html">← 返回 3D 展厅</a>
+</footer>
+
+<script src="content/chapters.js"></script>
+<script src="assets/katex/katex.min.js"></script>
+<script src="assets/katex/contrib/auto-render.min.js"></script>
+<script src="js/site.js"></script>
+<script>
+/* 数据渲染（普通脚本，确保即使 3D module 失败也能显示内容） */
+(function () {
+  var S = window.SITE;
+  window.M_MODELS = S.chapters.filter(function(c){ return c.model; });
+  var params = new URLSearchParams(location.search);
+  var wantId = parseInt(params.get('id'), 10);
+  var wantModel = params.get('model');
+  var start = 0;
+  if (!isNaN(wantId)) {
+    var found = window.M_MODELS.findIndex(function(c){ return c.id === wantId; });
+    if (found >= 0) start = found;
+  } else if (wantModel) {
+    var f2 = window.M_MODELS.findIndex(function(c){ return c.model && c.model.indexOf(wantModel) >= 0; });
+    if (f2 >= 0) start = f2;
+  }
+  window.M_IDX = start;
+  document.getElementById('m-count').textContent = window.M_MODELS.length;
+  document.getElementById('m-list').innerHTML = window.M_MODELS.map(function(c, i){
+    return '<a class="m-item' + (i === start ? ' on' : '') + '" href="model.html?id=' + c.id + '">'
+      + '<span>' + c.no + '</span><b>' + c.name + '</b></a>';
+  }).join('');
+  var cur = window.M_MODELS[start];
+  document.getElementById('m-kicker').textContent = 'MODEL ' + cur.no;
+  document.getElementById('m-title').textContent = cur.name;
+  document.getElementById('m-cap').textContent = cur.modelCap || cur.sub || '';
+})();
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { createStage, loadModel, starField, webglOK } from './core.js';
+document.getElementById('m-cap').textContent='MODULE_OK webgl='+webglOK();
+
+var idx = window.M_IDX || 0;
+var cur = window.M_MODELS[idx];
+var canvas = document.getElementById('m-canvas');
+var stage = null, model = null, clock = null;
+if (webglOK()) {
+  stage = createStage(canvas, { alpha:true, fov:38, camPos:[2.6,1.0,6.2], lookAt:[0,0,0], exposure:1.15 });
+  stage.scene.add(starField(500, 10));
+  clock = new THREE.Clock();
+  loadModel(cur.model, 2.8).then(function(m){
+    model = m; stage.scene.add(m);
+  }).catch(function(e){ document.getElementById('m-cap').textContent = '模型加载失败：' + e.message; });
+  stage.renderer.setAnimationLoop(function(){
+    var t = clock.getElapsedTime();
+    if (model) { model.rotation.y = t * 0.18; model.rotation.x = Math.sin(t*0.4)*0.08; }
+    stage.renderer.render(stage.scene, stage.camera);
+  });
+}
+var y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear();
+if (window.renderMathInElement) renderMathInElement(document.body, { delimiters:[{left:'$',right:'$',display:false}], throwOnError:false });
+</script>
+</body>
+</html>

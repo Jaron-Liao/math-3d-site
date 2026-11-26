@@ -57,7 +57,7 @@ async function boot() {
     camera.position.y = 0.95 - k * 0.25 - pointer.y * 0.16;
     camera.lookAt(1.25 + k * 0.4, 0, 0);
 
-    renderer.render(scene, camera);
+    stage.draw(t);
   });
 
   document.addEventListener('visibilitychange', () => {

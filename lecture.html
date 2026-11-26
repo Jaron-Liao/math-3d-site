@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>讲义索引 · 高等数学 3D</title>
+<link rel="stylesheet" href="assets/katex/katex-inline.css">
+<link rel="stylesheet" href="css/site.css">
+<script type="importmap">
+{ "imports": { "three": "./assets/three.module.min.js", "three/addons/": "./assets/jsm/" } }
+</script>
+</head>
+<body>
+
+<nav class="nav solid">
+  <div class="nav-logo"><a href="index.html" style="color:inherit"><b>高等数学</b></a><span>LECTURES</span></div>
+  <div class="nav-links">
+    <a href="lecture.html" class="on">讲义</a>
+    <a href="lab.html">实验室</a>
+    <a href="gallery.html">3D 展厅</a>
+    <a href="data.html">数据洞察</a>
+    <a href="about.html">关于</a>
+  </div>
+  <a class="nav-gh" data-repo href="#" target="_blank" rel="noopener">GitHub ↗</a>
+</nav>
+
+<section class="sec" style="padding-top:104px">
+  <div class="sec-head reveal">
+    <h2 class="sec-title"><small>Chapters</small>十章主线，一条脉络</h2>
+    <p class="sec-desc">从数列极限出发，经导数、积分、级数，抵达常微分方程。每章独立成页，配一座对应的 3D 模型。</p>
+  </div>
+  <div class="ch-grid" id="ch-grid"></div>
+</section>
+
+<footer class="foot">
+  <span>© <span id="year"></span> 高等数学 · 3D Edition</span>
+  <a href="index.html">← 返回首页</a>
+</footer>
+
+<script src="content/chapters.js"></script>
+<script src="assets/katex/katex.min.js"></script>
+<script src="assets/katex/contrib/auto-render.min.js"></script>
+<script src="js/site.js"></script>
+<script>
+(function () {
+  var S = window.SITE, grid = document.getElementById('ch-grid');
+  grid.innerHTML = S.chapters.map(function (c) {
+    var live = c.status === 'live';
+    return '<a class="ch-card" href="chapter.html?id=' + c.id + '">'
+      + '<span class="ch-no">' + c.no + ' / ' + c.en + '</span>'
+      + '<div class="ch-name">' + c.name + '</div>'
+      + '<p class="ch-sub">' + c.sub + '</p>'
+      + '<div class="ch-foot"><span class="ch-status' + (live ? ' live' : '') + '">' + (live ? '● 已完稿' : '○ 骨架') + '</span><span class="ch-arrow">进入阅读 →</span></div>'
+      + '</a>';
+  }).join('');
+  var y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
+  if (window.renderMathInElement) renderMathInElement(document.body, { delimiters: [{ left: '$', right: '$', display: false }], throwOnError: false });
+})();
+</script>
+<script>document.querySelectorAll(".reveal").forEach(function(el){el.classList.add("in")});</script>
+</body>
+</html>

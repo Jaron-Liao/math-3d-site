@@ -6,3 +6,7 @@ models/*.glb
 *.tgz
 package/
 node_modules/
+_probe*.html
+.edge-*/
+.ai-memory/
+_shots/

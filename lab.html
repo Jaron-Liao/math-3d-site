@@ -15,9 +15,11 @@
 <nav class="nav solid">
   <div class="nav-logo"><a href="index.html" style="color:inherit"><b>高等数学</b></a><span>3D LAB</span></div>
   <div class="nav-links">
-    <a href="index.html#notes">讲义</a>
+    <a href="lecture.html">讲义</a>
     <a href="lab.html" class="on">实验室</a>
     <a href="gallery.html">3D 展厅</a>
+    <a href="data.html">数据洞察</a>
+    <a href="about.html">关于</a>
   </div>
   <a class="nav-gh" data-repo href="#" target="_blank" rel="noopener">GitHub ↗</a>
 </nav>
@@ -36,31 +38,100 @@
     </div>
 
     <div class="lab-panel">
-      <h3>参数</h3>
-      <p>拖动滑块即时重建网格（120×120 顶点）</p>
-
+      <h3>参数 <span class="p-count">17 项可调</span></h3>
+      <p>拖动滑块即时重建网格 · 参数变化实时预览</p>
+      <details class="p-group" open><summary>几何 · 曲面方程</summary>
       <div class="ctl">
         <label>振幅 a <b id="v-a">1.00</b></label>
-        <input type="range" id="p-a" min="0.1" max="2" step="0.05" value="1">
+        <input type="range" id="p-a" min="0.1" max="2.5" step="0.05" value="1.00">
       </div>
       <div class="ctl">
-        <label>频率 b（x 方向） <b id="v-b">1.60</b></label>
-        <input type="range" id="p-b" min="0.4" max="4" step="0.1" value="1.6">
+        <label>频率 b（x） <b id="v-b">1.6</b></label>
+        <input type="range" id="p-b" min="0.2" max="5" step="0.1" value="1.6">
       </div>
       <div class="ctl">
-        <label>频率 c（y 方向） <b id="v-c">1.60</b></label>
-        <input type="range" id="p-c" min="0.4" max="4" step="0.1" value="1.6">
+        <label>频率 c（y） <b id="v-c">1.6</b></label>
+        <input type="range" id="p-c" min="0.2" max="5" step="0.1" value="1.6">
       </div>
-
+      <div class="ctl">
+        <label>相位 φ <b id="v-phase">0.00rad</b></label>
+        <input type="range" id="p-phase" min="0" max="6.28" step="0.05" value="0.00">
+      </div>
+      <div class="ctl">
+        <label>二次项 d <b id="v-d">0.00</b></label>
+        <input type="range" id="p-d" min="-0.5" max="0.5" step="0.02" value="0.00">
+      </div>
+      <div class="ctl">
+        <label>Z 缩放 <b id="v-scale">0.55</b></label>
+        <input type="range" id="p-scale" min="0.2" max="1.6" step="0.05" value="0.55">
+      </div>
+      </details>
+      <details class="p-group"><summary>网格 · 结构</summary>
+      <div class="ctl">
+        <label>网格密度 <b id="v-density">120</b></label>
+        <input type="range" id="p-density" min="20" max="180" step="10" value="120">
+      </div>
+      <div class="ctl">
+        <label>平面尺寸 <b id="v-size">6.4</b></label>
+        <input type="range" id="p-size" min="4" max="10" step="0.2" value="6.4">
+      </div>
+      </details>
+      <details class="p-group"><summary>材质 · 光照</summary>
+      <div class="ctl">
+        <label>金属度 <b id="v-metalness">0.72</b></label>
+        <input type="range" id="p-metalness" min="0" max="1" step="0.05" value="0.72">
+      </div>
+      <div class="ctl">
+        <label>粗糙度 <b id="v-roughness">0.26</b></label>
+        <input type="range" id="p-roughness" min="0.05" max="1" step="0.05" value="0.26">
+      </div>
+      <div class="ctl">
+        <label>不透明度 <b id="v-opacity">1.00</b></label>
+        <input type="range" id="p-opacity" min="0.2" max="1" step="0.05" value="1.00">
+      </div>
+      <div class="ctl">
+        <label>线框强度 <b id="v-wireOpacity">0.55</b></label>
+        <input type="range" id="p-wireOpacity" min="0" max="1" step="0.05" value="0.55">
+      </div>
+      <div class="ctl">
+        <label>点大小 <b id="v-pointSize">0.022</b></label>
+        <input type="range" id="p-pointSize" min="0.005" max="0.06" step="0.005" value="0.022">
+      </div>
+      <div class="ctl">
+        <label>曝光 <b id="v-exposure">1.05</b></label>
+        <input type="range" id="p-exposure" min="0.5" max="2" step="0.05" value="1.05">
+      </div>
+      <div class="ctl">
+        <label>主光强度 <b id="v-keyLight">2.6</b></label>
+        <input type="range" id="p-keyLight" min="0.5" max="5" step="0.1" value="2.6">
+      </div>
+      </details>
       <div class="ctl">
         <label>显示方式</label>
         <div class="seg-ctl" id="modes">
           <button data-m="solid" class="on">曲面</button>
           <button data-m="wire">网格</button>
           <button data-m="points">点云</button>
+          <button data-m="hybrid">叠加</button>
         </div>
       </div>
-
+      <div class="ctl">
+        <label>配色方案</label>
+        <div class="seg-ctl" id="palettes">
+          <button data-p="gold" class="on">金</button>
+          <button data-p="ice">冰蓝</button>
+          <button data-p="coral">珊瑚</button>
+          <button data-p="mint">青绿</button>
+        </div>
+      </div>
+      <div class="ctl">
+        <label>视角预设</label>
+        <div class="seg-ctl" id="views">
+          <button data-v="perspective" class="on">透视</button>
+          <button data-v="top">俯视</button>
+          <button data-v="side">侧视</button>
+        </div>
+      </div>
       <div class="ctl">
         <label>自动旋转</label>
         <div class="seg-ctl" id="spin">
@@ -68,7 +139,28 @@
           <button data-s="0">关</button>
         </div>
       </div>
-
+      <div class="ctl">
+        <label>辅助显示</label>
+        <div class="seg-ctl" id="helpers">
+          <button data-h="grid" class="on">网格</button>
+          <button data-h="axes">坐标轴</button>
+        </div>
+      </div>
+      <div class="ctl">
+        <label>函数族</label>
+        <div class="seg-ctl" id="families">
+          <button data-f="sincos" class="on">sin·cos</button>
+          <button data-f="ripple">涟漪</button>
+          <button data-f="saddle">鞍面</button>
+          <button data-f="wave">行波</button>
+        </div>
+      </div>
+      <div class="ctl" style="margin-top:6px">
+        <label>载入模型库（20 座） <b id="v-pick">参数曲面</b></label>
+        <select class="pick" id="model-pick">
+          <option value="">— 参数曲面（实时生成）—</option>
+        </select>
+      </div>
       <div class="lab-note" id="lab-note"></div>
     </div>
   </div>
@@ -80,6 +172,7 @@
 </footer>
 
 <script src="content/chapters.js"></script>
+<script src="content/models.js"></script>
 <script src="assets/katex/katex.min.js"></script>
 <script src="assets/katex/contrib/auto-render.min.js"></script>
 <script src="js/site.js"></script>

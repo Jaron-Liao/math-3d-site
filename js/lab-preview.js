@@ -7,7 +7,7 @@ const canvas = document.getElementById('lab-preview');
 
 async function boot() {
   if (!canvas || !webglOK()) return;
-  const stage = createStage(canvas, { fov: 40, camPos: [3.6, 2.4, 4.4], lookAt: [0, 0, 0], exposure: 1.0 });
+  const stage = createStage(canvas, { fov: 40, camPos: [3.6, 2.4, 4.4], lookAt: [0, 0, 0], exposure: 0.92, postfx: { bloomStrength: 0.30, bloomThreshold: 0.92 } });
   const { scene, camera, renderer } = stage;
 
   const controls = new OrbitControls(camera, canvas);
@@ -27,7 +27,7 @@ async function boot() {
 
   renderer.setAnimationLoop(() => {
     controls.update();
-    renderer.render(scene, camera);
+    stage.draw();
   });
 }
 boot();

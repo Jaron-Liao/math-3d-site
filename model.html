@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3D 模型详情 · 高等数学</title>
+<link rel="stylesheet" href="assets/katex/katex-inline.css">
+<link rel="stylesheet" href="css/site.css">
+<script type="importmap">
+{ "imports": { "three": "./assets/three.module.min.js", "three/addons/": "./assets/jsm/" } }
+</script>
+</head>
+<body>
+
+<nav class="nav solid">
+  <div class="nav-logo"><a href="index.html" style="color:inherit"><b>高等数学</b></a><span>3D MODEL</span></div>
+  <div class="nav-links">
+    <a href="lecture.html">讲义</a>
+    <a href="lab.html">实验室</a>
+    <a href="gallery.html" class="on">3D 展厅</a>
+    <a href="data.html">数据洞察</a>
+    <a href="about.html">关于</a>
+  </div>
+  <a class="nav-gh" data-repo href="#" target="_blank" rel="noopener">GitHub ↗</a>
+</nav>
+
+<section class="sec" style="padding-top:104px">
+  <div class="sec-head">
+    <h2 class="sec-title"><small id="m-kicker">MODEL</small><span id="m-title">模型详情</span></h2>
+    <p class="sec-desc" id="m-cap">加载中…</p>
+  </div>
+  <div class="lab-wrap">
+    <div class="canvas-shell" style="min-height:520px">
+      <canvas id="m-canvas"></canvas>
+      <div class="canvas-hint">拖动旋转 · 滚轮缩放</div>
+    <div id="m-diag" style="position:absolute;left:8px;bottom:8px;font:10px monospace;color:#888"></div>
+    </div>
+    <div class="lab-panel">
+      <h3>模型切换</h3>
+      <p>共 <b id="m-count">0</b> 座模型，点击切换即时预览。</p>
+      <div class="m-list" id="m-list"></div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <span>© <span id="year"></span> 高等数学 · 3D Edition</span>
+  <a href="gallery.html">← 返回 3D 展厅</a>
+</footer>
+
+<script src="content/chapters.js"></script>
+<script src="content/models.js"></script>
+<script src="assets/katex/katex.min.js"></script>
+<script src="assets/katex/contrib/auto-render.min.js"></script>
+<script src="js/site.js"></script>
+<script>
+/* 数据渲染（普通脚本，确保即使 3D module 失败也能显示内容） */
+(function () {
+  var M = window.MODELS || [];
+  window.M_MODELS = M;
+  var params = new URLSearchParams(location.search);
+  var wantId = params.get('id');
+  var start = 0;
+  if (wantId) {
+    var found = M.findIndex(function (m) { return m.id === wantId; });
+    if (found >= 0) start = found;
+  }
+  window.M_IDX = start;
+  document.getElementById('m-count').textContent = M.length;
+  document.getElementById('m-list').innerHTML = M.map(function (m, i) {
+    return '<a class="m-item' + (i === start ? ' on' : '') + '" href="model.html?id=' + m.id + '">'
+      + '<span>' + m.cat + '</span><b>' + m.name + '</b></a>';
+  }).join('');
+  var cur = M[start] || {};
+  document.getElementById('m-kicker').textContent = (cur.cat || 'MODEL') + ' · ' + (cur.en || '');
+  document.getElementById('m-title').textContent = cur.name || '模型详情';
+  document.getElementById('m-cap').textContent = cur.desc || '';
+})();
+</script>
+<script type="module" src="js/model.js"></script>
+</body>
+</html>
