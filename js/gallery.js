@@ -113,6 +113,17 @@ async function boot() {
     go(Math.round(target) + (e.deltaY > 0 ? 1 : -1));
   }, { passive: false });
 
+  /* 键盘导航：←→ 切换展品，回车/空格 进入详情 */
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') { go(Math.round(target) + 1); }
+    else if (e.key === 'ArrowLeft') { go(Math.round(target) - 1); }
+    else if (e.key === 'Enter' || e.key === ' ') {
+      const idx = ((Math.round(target) % n) + n) % n;
+      const m = M[idx];
+      location.href = m.ch ? 'chapter.html?c=' + m.ch : 'model.html?id=' + m.id;
+    }
+  });
+
   const ray = new THREE.Raycaster();
   const ndc = new THREE.Vector2();
   let startX = 0, startCur = 0, moved = 0;

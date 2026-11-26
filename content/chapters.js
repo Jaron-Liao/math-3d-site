@@ -361,8 +361,8 @@ window.SITE = {
     {
       id: 6, no: '06', name: '多元函数微分', en: 'MULTIVARIABLE CALCULUS',
       sub: '偏导 · 全微分 · 方向导数 · 极值',
-      model: 'models/ch_partial_saddle.gltf',
-      modelCap: '双曲抛物面：鞍点处沿不同方向单调性相反，切平面是局部线性化的载体',
+      model: 'models/ex_gradient_terrain.glb',
+      modelCap: '梯度地形：每一点的坡度方向就是该处导数向量，最陡上坡即梯度的几何意义',
       status: 'live',
       lead: '多维情形下"可微"强于"偏导存在"，切平面取代切线成为局部线性化的载体。所有概念都在回答一个问题：沿不同方向，函数怎么变？',
       sections: [
