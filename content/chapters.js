@@ -644,33 +644,33 @@ window.SITE = {
       sections: [
         {
           h: '10.1 方程、解与方向场',
-          html: `<div class="formula">$y\\'=f(x,y),\\qquad y=y(x)\\ \\text{使恒等式成立}$</div>
+          html: `<div class="formula">$y'=f(x,y),\\qquad y=y(x)\\ \\text{使恒等式成立}$</div>
 <p>一阶方程的解是一族曲线（通解含一个任意常数），初值条件 <span>$y(x_{0})=y_{0}$</span> 从中挑出一条（特解）。存在唯一性定理（Picard）：<span>$f$</span> 与 <span>$f_{y}$</span> 在初值邻域连续 ⟹ 过该点的解存在且唯一。</p>
-<p>唯一性一旦被破坏，过同一点可以分叉出多条解——<span>$y\\'=\\sqrt{|y|}$</span> 在 <span>$y=0$</span> 处 <span>$f_{y}$</span> 爆炸，解可以从横轴上任意时刻"起飞"。3D 模型里的流线场，就是"每点切向 = 场向量"这一句话的可视化。</p>`,
+<p>唯一性一旦被破坏，过同一点可以分叉出多条解——<span>$y'=\\sqrt{|y|}$</span> 在 <span>$y=0$</span> 处 <span>$f_{y}$</span> 爆炸，解可以从横轴上任意时刻"起飞"。3D 模型里的流线场，就是"每点切向 = 场向量"这一句话的可视化。</p>`,
         },
         {
           h: '10.2 可分离变量与一阶线性',
           html: `<p>两类可以直接积分的结构。可分离变量：把 <span>$x$</span> 与 <span>$y$</span> 各归一边再积分</p>
 <div class="formula">$g(y)\\,\\mathrm{d}y=f(x)\\,\\mathrm{d}x\\ \\Longrightarrow\\ \\int g(y)\\,\\mathrm{d}y=\\int f(x)\\,\\mathrm{d}x$</div>
-<p>一阶线性 <span>$y\\'+P(x)y=Q(x)$</span> 用积分因子：<span>$\\mu=e^{\\int P\\mathrm{d}x}$</span>，乘上方程左边恰好是 <span>$(\\mu y)\\'$</span>：</p>
+<p>一阶线性 <span>$y'+P(x)y=Q(x)$</span> 用积分因子：<span>$\\mu=e^{\\int P\\mathrm{d}x}$</span>，乘上方程左边恰好是 <span>$(\\mu y)'$</span>：</p>
 <div class="formula">$y=e^{-\\int P\\mathrm{d}x}\\left(\\int Q\\,e^{\\int P\\mathrm{d}x}\\,\\mathrm{d}x+C\\right)$</div>
-<p>公式不必背死，记住思想：<strong>找一个因子使左边变成某个乘积的导数</strong>。齐次方程 <span>$y\\'=\\varphi(y/x)$</span> 换元 <span>$u=y/x$</span> 后化为可分离变量。</p>`,
+<p>公式不必背死，记住思想：<strong>找一个因子使左边变成某个乘积的导数</strong>。齐次方程 <span>$y'=\\varphi(y/x)$</span> 换元 <span>$u=y/x$</span> 后化为可分离变量。</p>`,
         },
         {
           h: '10.3 可降阶的高阶方程',
           html: `<p>三类可降阶结构，对应三种"缺什么就换什么"的换元：</p>
 <ul>
 <li><span>$y^{(n)}=f(x)$</span>：直接连续积分 <span>$n$</span> 次，每积一次添一个常数；</li>
-<li>缺 <span>$y$</span>：令 <span>$p=y\\'$</span>，方程降为 <span>$p$</span> 的一阶方程，解出 <span>$p$</span> 再积一次得 <span>$y$</span>；</li>
-<li>缺 <span>$x$</span>：令 <span>$p=y\\'$</span> 且把 <span>$p$</span> 视为 <span>$y$</span> 的函数，<span>$y\\'\\'=p\\dfrac{\\mathrm{d}p}{\\mathrm{d}y}$</span>。</li>
+<li>缺 <span>$y$</span>：令 <span>$p=y'$</span>，方程降为 <span>$p$</span> 的一阶方程，解出 <span>$p$</span> 再积一次得 <span>$y$</span>；</li>
+<li>缺 <span>$x$</span>：令 <span>$p=y'$</span> 且把 <span>$p$</span> 视为 <span>$y$</span> 的函数，<span>$y''=p\\dfrac{\\mathrm{d}p}{\\mathrm{d}y}$</span>。</li>
 </ul>
-<p>第三类的链式替换 <span>$y\\'\\'=p\\,p\\'$</span>（对 <span>$y$</span> 求导）最容易写错方向——是把 <span>$x$</span> 从方程里"蒸发"的关键一步。</p>`,
+<p>第三类的链式替换 <span>$y''=p\\,p'$</span>（对 <span>$y$</span> 求导）最容易写错方向——是把 <span>$x$</span> 从方程里"蒸发"的关键一步。</p>`,
         },
         {
           h: '10.4 二阶常系数线性方程',
-          html: `<div class="formula">$y\\'\\'+py\\\'+qy=0\\ \\Longrightarrow\\ r^{2}+pr+q=0,\\quad y=C_{1}e^{r_{1}x}+C_{2}e^{r_{2}x}$</div>
+          html: `<div class="formula">$y''+py\'+qy=0\\ \\Longrightarrow\\ r^{2}+pr+q=0,\\quad y=C_{1}e^{r_{1}x}+C_{2}e^{r_{2}x}$</div>
 <p>特征方程按判别式三分：两实根、重根（<span>$y=(C_{1}+C_{2}x)e^{rx}$</span>）、共轭复根 <span>$r=\\alpha\\pm\\beta i$</span>（<span>$y=e^{\\alpha x}(C_{1}\\cos\\beta x+C_{2}\\sin\\beta x)$</span>）——最后一种正是弹簧振子"欠阻尼振荡"的数学形态。</p>
-<p>非齐次 <span>$y\\'\\'+py\\\'+qy=f(x)$</span>：通解 = 齐次通解 + 一个特解。特解用<strong>待定系数法</strong>按 <span>$f$</span> 的形态设解：</p>
+<p>非齐次 <span>$y''+py\'+qy=f(x)$</span>：通解 = 齐次通解 + 一个特解。特解用<strong>待定系数法</strong>按 <span>$f$</span> 的形态设解：</p>
 <div class="formula">$f=P_{m}(x)e^{\\lambda x}\\ \\Longrightarrow\\ y^{*}=x^{k}Q_{m}(x)e^{\\lambda x},\\ k=\\lambda\\ \\text{作为特征根的重数}$</div>
 <p><span>$k$</span> 是补救因子：设出的解如果撞上齐次解（共振），要乘 <span>$x$</span> 修正。<span>$f$</span> 含三角函数时同样按复指数框架处理。</p>`,
           boxes: [{ type: 'warn', label: '共振要乘 x', html: '自由项的 λ 恰好是特征根时（如 y\'\'+y=cos x），按常规设的特解是齐次解、代进去恒等于零，必须乘 x 后重设。' }],
