@@ -56,6 +56,22 @@ if (ch.traps && ch.traps.length) {
   });
 }
 
+/* ── 外部教学资源（源数据 data/resources.json → 构建产物 js/resources.js） ── */
+const resMap = (window.SITE_RESOURCES || {})[String(ch.id)];
+if (resMap && Array.isArray(resMap.items) && resMap.items.length) {
+  parts.push('<h2>外部教学资源</h2>');
+  parts.push(`<div class="box hint"><div class="lab">来源说明</div>
+    <p>以下 ${resMap.items.length} 条公开课程链接由 <code>data/resources.json</code> 按本章知识点自动挂载，不复制任何版权内容；正文未补全时可先据此学习。</p></div>`);
+  resMap.items.forEach((r) => {
+    const covers = (r.covers || []).slice(0, 6).join(' · ');
+    parts.push(`<div class="box"><div class="lab">${(r.platform || 'link').toUpperCase()}${r.author ? ' · ' + r.author : ''}</div>
+      <p><a href="${r.url}" target="_blank" rel="noopener noreferrer">${r.title}</a></p>
+      ${covers ? `<p style="color:var(--text-3);font-size:12.5px;margin:2px 0 0">覆盖：${covers}</p>` : ''}
+      ${r.note ? `<p style="color:var(--text-3);font-size:12.5px;margin:2px 0 0">${r.note}</p>` : ''}
+    </div>`);
+  });
+}
+
 body.innerHTML = parts.join('');
 window.renderMath(body);
 
