@@ -160,8 +160,8 @@ window.SITE = {
     {
       id: 3, no: '03', name: '定积分与应用', en: 'DEFINITE INTEGRAL',
       sub: '分割求和 · 基本定理 · 换元分部 · 旋转体与弧长',
-      model: 'models/ch_integral_solid.gltf',
-      modelCap: '旋转体：曲线绕轴旋转扫出的曲面，体积元 $\\mathrm dV=\\pi f^{2}(x)\\,\\mathrm dx$',
+      model: 'models/ex_exponential_funnel.glb',
+      modelCap: '旋转体：$e^{-x}$ 曲线绕轴旋转扫出的喇叭面，体积元 $\\mathrm dV=\\pi f^{2}(x)\\,\\mathrm dx$',
       status: 'live',
       lead: '积分是"无限细分后求和"的极限。它把局部信息累加成整体量——面积、体积、弧长、功，全部是同一套分割—近似—求和—取极限的产物。',
       sections: [

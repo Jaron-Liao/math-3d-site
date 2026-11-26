@@ -35,7 +35,7 @@
     <p class="lec-sub">从 ε-N 的第一次量化，到常微分方程的向量场。每章一座 Blender 模型，正文独立成页。</p>
     <div class="lec-stats">
       <span><b>10</b>章正文</span>
-      <span><b>3</b>章已完稿</span>
+      <span><b id="stat-live">—</b>章已完稿</span>
       <span><b>20</b>座模型</span>
       <span><b>KaTeX</b>排版</span>
     </div>
@@ -56,7 +56,7 @@
   <a href="index.html">← 返回首页</a>
 </footer>
 
-<script src="content/chapters.js?v=20261127b"></script>
+<script src="content/chapters.js?v=20261127c"></script>
 <script src="content/models.js"></script>
 <script src="assets/katex/katex.min.js"></script>
 <script src="assets/katex/contrib/auto-render.min.js"></script>
@@ -66,9 +66,9 @@
   var S = window.SITE;
   // 章节 -> 缩略图（取对应模型的 Blender 渲染）
   var THUMB = {
-    1: 'ch_limit_rings', 2: 'ch_partial_saddle', 3: 'ch_integral_solid',
-    4: 'ex_catenoid', 5: 'ex_archimedean', 6: 'ex_gyroid',
-    7: 'ex_hyperboloid', 8: 'ch_line_helix', 9: 'ex_standing_wave', 10: 'ch_ode_flow'
+    1: 'ch_limit_rings', 2: 'ch_partial_saddle', 3: 'ex_exponential_funnel',
+    4: 'ex_klein_bottle', 5: 'ex_archimedean', 6: 'ex_gradient_terrain',
+    7: 'ch_integral_solid', 8: 'ch_line_helix', 9: 'ex_standing_wave', 10: 'ch_ode_flow'
   };
   var list = document.getElementById('lec-list');
   list.innerHTML = S.chapters.map(function (c) {
@@ -87,6 +87,7 @@
       + '<div class="lec-thumb"><img src="assets/thumbs/' + t + '.png" alt="' + c.name + '" loading="lazy"></div>'
       + '</a>';
   }).join('');
+  document.getElementById('stat-live').textContent = S.chapters.filter(function (c) { return c.status === 'live'; }).length;
   document.querySelectorAll('.reveal').forEach(function (el, i) {
     setTimeout(function () { el.classList.add('in'); }, 60 * i);
   });
