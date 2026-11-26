@@ -5,7 +5,7 @@ import { createStage, loadModel, webglOK } from './core.js';
 
 const S = window.SITE;
 const params = new URLSearchParams(location.search);
-const id = Number(params.get('c')) || 1;
+const id = Number(params.get('id') || params.get('c')) || 1;
 const ch = S.chapters.find((c) => c.id === id) || S.chapters[0];
 
 document.title = ch.name + ' · 高等数学 3D';
