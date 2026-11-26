@@ -3,9 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>高等数学 · 3D —— 从极限到常微分方程</title>
-<meta name="description" content="可交互的高等数学 3D 讲义：十座 Blender 数学模型、ε-N 收敛环带、旋转体曲面与实时参数曲面实验室。">
-<link rel="stylesheet" href="assets/katex/katex-inline.css">
+<title>高等数学 · 3D</title>
+<meta name="description" content="看得见的高等数学：100 个动态变体、20 座 Blender 模型、可交互的 3D 讲义。">
 <link rel="stylesheet" href="css/site.css">
 <script type="importmap">
 { "imports": {
@@ -14,24 +13,21 @@
 } }
 </script>
 </head>
-<body>
+<body class="home-only">
 
 <nav class="nav">
   <div class="nav-logo"><b>高等数学</b><span>3D EDITION</span></div>
   <div class="nav-links">
-    <a href="lecture.html">讲义</a>
-    <a href="lab.html">实验室</a>
-    <a href="gallery.html">3D 展厅</a>
-    <a href="data.html">数据洞察</a>
-    <a href="about.html">关于</a>
+    <a href="index.html" class="on">主页</a>
   </div>
   <a class="nav-gh" data-repo href="#" target="_blank" rel="noopener">GitHub ↗</a>
 </nav>
 
 <header class="hero">
-  <div class="hero-stage"><img src="assets/env/floor.png" alt=""></div>
   <canvas id="hero-canvas"></canvas>
   <div class="hero-veil"></div>
+  <div id="hero-fade"></div>
+
   <div class="hero-inner">
     <div class="hero-eyebrow">Calculus · Built in 3D</div>
     <h1>看得见的<br><em>高等数学</em></h1>
@@ -40,9 +36,9 @@
       公式仍然严格，但这一次你能看见它。
     </p>
     <div class="hero-meta">
-      <div><b>10</b>章节</div>
-      <div><b>3</b>已上线正文</div>
+      <div><b>100</b>动态变体</div>
       <div><b>20</b>3D 模型</div>
+      <div><b>10</b>章讲义</div>
       <div><b>实时</b>参数曲面</div>
     </div>
     <div class="hero-cta">
@@ -50,130 +46,19 @@
       <a class="btn" href="gallery.html">进入 3D 展厅 →</a>
     </div>
   </div>
-  <div class="hero-scroll"><span>SCROLL</span><i></i></div>
+
+  <div class="hero-hud" id="hero-hud"><b>变体 —</b><span>载入中</span></div>
+  <button class="hero-next" id="hero-next" type="button" title="换一版（快捷键 N）">↻ 换一版</button>
 </header>
 
-<section class="sec" id="notes">
-  <div class="sec-head reveal">
-    <h2 class="sec-title"><small>Chapters</small>十章主线，一条脉络</h2>
-    <p class="sec-desc">从数列极限出发，经导数、积分、级数，抵达常微分方程。每章配一座对应的 3D 模型，可在章节页内旋转查看。</p>
-  </div>
-  <div class="ch-grid" id="ch-grid"></div>
-</section>
-
-<section class="sec" id="models">
-  <div class="sec-head reveal">
-    <h2 class="sec-title"><small>Models</small>二十座模型，一间陈列室</h2>
-    <p class="sec-desc">全部由 Blender 参数脚本生成：拓扑、极小曲面、球谐、纽结、旋转体。点击任意一座进入可旋转的详情页。</p>
-  </div>
-  <div class="m-filter reveal" id="m-filter"></div>
-  <div class="m-grid" id="m-grid"></div>
-</section>
-
-<section class="sec" id="lab">
-  <div class="sec-head reveal">
-    <h2 class="sec-title"><small>Live Lab</small>把曲面握在手里</h2>
-    <p class="sec-desc">拖动旋转、滚轮缩放，实时修改振幅与频率，观察偏导数的正负如何决定鞍点的形状。</p>
-  </div>
-  <div class="canvas-shell reveal" style="min-height:520px">
-    <canvas id="lab-preview"></canvas>
-    <div class="canvas-tag">z = a · sin(bx) · cos(cy)</div>
-    <div class="canvas-hint">拖动旋转 · 滚轮缩放</div>
-  </div>
-  <div style="margin-top:22px" class="reveal">
-    <a class="btn" href="lab.html">打开完整实验室 →</a>
-  </div>
-</section>
-
-<section class="sec" id="stage">
-  <div class="sec-head reveal">
-    <h2 class="sec-title"><small>3D Gallery</small>走进一座数学展厅</h2>
-    <p class="sec-desc">十个模型悬在同一片空间里，绕环而行，点击任意一座即可进入对应章节。</p>
-  </div>
-  <div class="reveal" style="border:1px solid var(--line);border-radius:18px;padding:38px 40px;background:linear-gradient(160deg,rgba(32,27,20,.7),rgba(14,12,9,.6));display:flex;justify-content:space-between;align-items:center;gap:26px;flex-wrap:wrap">
-    <div>
-      <div style="font-family:var(--serif);font-size:26px;color:#F3ECDD">全站 3D 空间导航</div>
-      <p style="color:var(--text-3);font-size:13.5px;margin:8px 0 0;max-width:520px">相机沿环形轨道穿行，模型随行就位；滚轮与拖拽均可控制，右侧圆点快速跳转。</p>
-    </div>
-    <a class="btn primary" href="gallery.html">进入展厅</a>
-  </div>
-</section>
-
-<section class="sec" id="explore">
-  <div class="sec-head reveal">
-    <h2 class="sec-title"><small>Explore</small>继续探索</h2>
-    <p class="sec-desc">讲义、数据、关于本站——每个主题都已独立成页，点击直达，不再在本页下滑。</p>
-  </div>
-  <div class="link-grid reveal">
-    <a class="link-card" href="lecture.html">
-      <span class="lc-tag">LECTURES</span>
-      <b>十章讲义</b>
-      <p>从极限到微分方程，逐章独立页面阅读。</p>
-      <span class="lc-go">进入讲义 →</span>
-    </a>
-    <a class="link-card" href="data.html">
-      <span class="lc-tag">INSIGHTS</span>
-      <b>数据与来源</b>
-      <p>本站构建指标与行业研报数据，独立页面呈现。</p>
-      <span class="lc-go">查看数据 →</span>
-    </a>
-    <a class="link-card" href="about.html">
-      <span class="lc-tag">ABOUT</span>
-      <b>关于本站</b>
-      <p>技术栈、生成流程与数据层的完整说明。</p>
-      <span class="lc-go">了解更多 →</span>
-    </a>
-  </div>
-</section>
-
-<footer class="foot">
+<footer class="foot foot-slim">
   <span>© <span id="year"></span> 高等数学 · 3D Edition</span>
-  <span>模型由 Blender 脚本生成 · 公式由 KaTeX 渲染</span>
+  <span>动态栏由 100 个变体轮换 · 每 60 秒一换</span>
 </footer>
 
-<script src="content/chapters.js"></script>
 <script src="content/models.js"></script>
-<script src="assets/katex/katex.min.js"></script>
-<script src="assets/katex/contrib/auto-render.min.js"></script>
 <script src="js/site.js"></script>
-<script type="module" src="js/home.js"></script>
-<script type="module" src="js/lab-preview.js"></script>
-<script>
-/* 模型墙：按分类筛选（数据源 content/models.js） */
-(function () {
-  var M = window.MODELS || [];
-  var cats = ['全部'].concat(Object.keys(window.MODEL_CATS || {}));
-  var cur = '全部';
-  var grid = document.getElementById('m-grid');
-  var filter = document.getElementById('m-filter');
-  if (!grid || !filter) return;
-
-  function draw() {
-    var list = cur === '全部' ? M : (window.MODEL_CATS[cur] || []);
-    grid.innerHTML = list.map(function (m) {
-      var base = (m.file || '').replace(/^models\//, '').replace(/\.(gltf|glb)$/, '');
-      return '<a class="m-card" href="model.html?id=' + m.id + '">'
-        + '<div class="mc-thumb"><img src="assets/thumbs/' + base + '.png" alt="' + m.name + '" loading="lazy"></div>'
-        + '<div class="mc-body"><div class="mc-cat">' + m.cat + '</div>'
-        + '<div class="mc-name">' + m.name + '</div>'
-        + '<div class="mc-en">' + m.en + '</div>'
-        + '<div class="mc-tags">' + (m.tags || []).map(function (t) { return '<span>' + t + '</span>'; }).join('') + '</div></div>'
-        + '</a>';
-    }).join('');
-  }
-
-  filter.innerHTML = cats.map(function (c) {
-    return '<button data-c="' + c + '" class="' + (c === '全部' ? 'on' : '') + '">' + c + '</button>';
-  }).join('');
-  filter.addEventListener('click', function (e) {
-    var b = e.target.closest('button');
-    if (!b) return;
-    cur = b.dataset.c;
-    filter.querySelectorAll('button').forEach(function (x) { x.classList.toggle('on', x === b); });
-    draw();
-  });
-  draw();
-})();
-</script>
+<script src="js/hero-variants.js?v=20261127f"></script>
+<script type="module" src="js/home.js?v=20261127g"></script>
 </body>
 </html>
