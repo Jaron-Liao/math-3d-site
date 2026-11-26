@@ -358,11 +358,352 @@ window.SITE = {
         { h: '分部积分选错 u', b: '把指数函数当 u 会越积越高次，越算越复杂；按 LIATE 选。' },
       ],
     },
-    { id: 6, no: '06', name: '多元函数微分', en: 'MULTIVARIABLE CALCULUS', sub: '偏导 · 全微分 · 方向导数 · 极值', model: 'models/ch_partial_saddle.gltf', modelCap: '双曲抛物面：鞍点处沿不同方向单调性相反', status: 'outline', lead: '多维情形下"可微"强于"偏导存在"，切平面取代切线成为局部线性化的载体。', sections: [], formulas: [], example: null, traps: [] },
-    { id: 7, no: '07', name: '重积分', en: 'MULTIPLE INTEGRALS', sub: '二重 · 三重 · 极坐标 · 雅可比', model: null, modelCap: '', status: 'outline', lead: '重积分的全部技巧集中在两件事：选坐标系、定积分限。', sections: [], formulas: [], example: null, traps: [] },
-    { id: 8, no: '08', name: '曲线与曲面积分', en: 'LINE & SURFACE INTEGRAL', sub: '第一类 · 第二类 · 格林 · 高斯', model: 'models/ch_line_helix.gltf', modelCap: '螺旋线：曲线积分的路径与定向', status: 'outline', lead: '定向是这类积分的灵魂：换方向变号，闭合路径可化为区域积分。', sections: [], formulas: [], example: null, traps: [] },
-    { id: 9, no: '09', name: '无穷级数', en: 'SERIES', sub: '正项级数 · 幂级数 · 傅里叶', model: null, modelCap: '', status: 'outline', lead: '级数是"离散的积分"，收敛判别与展开半径是两条主线。', sections: [], formulas: [], example: null, traps: [] },
-    { id: 10, no: '10', name: '常微分方程', en: 'ORDINARY DIFFERENTIAL EQUATIONS', sub: '一阶方程 · 高阶线性 · 常系数', model: 'models/ch_ode_flow.gltf', modelCap: '向量场流线：解曲线沿场方向推进', status: 'outline', lead: '解方程的本质是找一条曲线，使它的每一点切向都等于给定的场。', sections: [], formulas: [], example: null, traps: [] },
+    {
+      id: 6, no: '06', name: '多元函数微分', en: 'MULTIVARIABLE CALCULUS',
+      sub: '偏导 · 全微分 · 方向导数 · 极值',
+      model: 'models/ch_partial_saddle.gltf',
+      modelCap: '双曲抛物面：鞍点处沿不同方向单调性相反，切平面是局部线性化的载体',
+      status: 'live',
+      lead: '多维情形下"可微"强于"偏导存在"，切平面取代切线成为局部线性化的载体。所有概念都在回答一个问题：沿不同方向，函数怎么变？',
+      sections: [
+        {
+          h: '6.1 偏导数：固定其余变量的导数',
+          html: `<p>偏导 <span>$\\dfrac{\\partial f}{\\partial x}$</span> 就是把 <span>$y$</span> 冻结后对 <span>$x$</span> 求导——它只反映沿坐标轴方向的变化率。几何上，它是曲面被 <span>$y=y_{0}$</span> 平面截出的曲线的切线斜率。</p>
+<div class="formula">$\\dfrac{\\partial f}{\\partial x}=\\lim_{\\Delta x\\to 0}\\dfrac{f(x+\\Delta x,y)-f(x,y)}{\\Delta x}$</div>
+<p>高阶混合偏导在<strong>连续</strong>条件下可交换次序（Clairaut 定理）：<span>$f_{xy}=f_{yx}$</span>。不连续时可以不相等——Schwarz 构造过经典反例 <span>$f(x,y)=xy\\dfrac{x^{2}-y^{2}}{x^{2}+y^{2}}$</span>，在原点处 <span>$f_{xy}(0,0)\\ne f_{yx}(0,0)$</span>。</p>`,
+        },
+        {
+          h: '6.2 可微与全微分：强于偏导存在的条件',
+          html: `<div class="formula">$\\mathrm{d}z=f_{x}\\,\\mathrm{d}x+f_{y}\\,\\mathrm{d}y,\\quad \\text{其中 } \\Delta z-\\mathrm{d}z=o(\\rho),\\ \\rho=\\sqrt{(\\Delta x)^{2}+(\\Delta y)^{2}}$</div>
+<p>逻辑链是本节核心：<strong>偏导连续 ⟹ 可微 ⟹ 偏导存在</strong>，且<strong>可微 ⟹ 连续</strong>。反向全部不成立。最经典反例：</p>
+<div class="formula">$f(x,y)=\\dfrac{xy}{x^{2}+y^{2}},\\ f(0,0)=0$</div>
+<p>它在原点两个偏导都存在（均为 0），但沿 <span>$y=kx$</span> 趋于原点时极限是 <span>$\\dfrac{k}{1+k^{2}}$</span>，与方向有关——连极限都不存在，当然不可微、不连续。偏导存在只是"沿两条轴探了两根针"，不足以保证整体行为。</p>`,
+          boxes: [{ type: 'warn', label: '判别顺序', html: '判断分段函数在分界点可微性：先验证 <strong>连续</strong> → 再算偏导 → 最后用定义验证 <span>$\\Delta z-(f_{x}\\Delta x+f_{y}\\Delta y)=o(\\rho)$</span>。跳步是常见扣分点。' }],
+        },
+        {
+          h: '6.3 链式法则与隐函数求导',
+          html: `<p>多元复合的链式法则画成"树"最不易错：变量逐层展开，每条路径贡献一项乘积。<span>$z=f(u,v),\\ u=u(t),\\ v=v(t)$</span> 时</p>
+<div class="formula">$\\dfrac{\\mathrm{d}z}{\\mathrm{d}t}=f_{u}\\dfrac{\\mathrm{d}u}{\\mathrm{d}t}+f_{v}\\dfrac{\\mathrm{d}v}{\\mathrm{d}t}$</div>
+<p>隐函数求导有两种姿势：直接对方程两边求导后解出；或用隐函数定理的公式。设 <span>$F(x,y,z)=0$</span> 确定隐函数，则</p>
+<div class="formula">$\\dfrac{\\partial z}{\\partial x}=-\\dfrac{F_{x}}{F_{z}}$</div>
+<p>注意公式里的下标是<strong>把其它自变量冻结</strong>后的偏导——"冻结了谁"不同，同一个记号算出的值可以不同，这是抽象符号最坑人的地方。</p>`,
+        },
+        {
+          h: '6.4 方向导数与梯度',
+          html: `<div class="formula">$\\nabla f=\\left(f_{x},f_{y}\\right),\\quad \\dfrac{\\partial f}{\\partial\\boldsymbol{l}}=\\nabla f\\cdot\\boldsymbol{e}_{l}=|\\nabla f|\\cos\\theta$</div>
+<p>方向导数是函数沿任意单位方向 <span>$\\boldsymbol{e}_{l}$</span> 的变化率，梯度是它的"系数向量"。三个结论一眼看清：</p>
+<ul>
+<li>沿梯度方向增长最快，速率恰为 <span>$|\\nabla f|$</span>；</li>
+<li>梯度与等值线（面）<strong>正交</strong>；</li>
+<li>负梯度方向下降最快——这就是梯度下降法的全部原理。</li>
+</ul>
+<p>梯度下降在机器学习里每次走一小步 <span>$\\boldsymbol{x}\\leftarrow\\boldsymbol{x}-\\eta\\nabla f(\\boldsymbol{x})$</span>：多维微分的"工业出口"。</p>`,
+        },
+        {
+          h: '6.5 极值：从无条件到拉格朗日',
+          html: `<p>无条件极值的两步：解方程组 <span>$f_{x}=f_{y}=0$</span> 得驻点；用 <strong>AC 判别法</strong>分类。记 <span>$A=f_{xx},\\ B=f_{xy},\\ C=f_{yy}$</span>：</p>
+<div class="formula">$AC-B^{2}>0\\ (A<0\\ 大值\\ /\\ A>0\\ 小值),\\qquad AC-B^{2}<0\\ \\text{鞍点}$</div>
+<p>带约束 <span>$g(x,y)=0$</span> 的极值用<strong>拉格朗日乘数法</strong>：构造 <span>$L=f+\\lambda g$</span>，解 <span>$L_{x}=L_{y}=L_{\\lambda}=0$</span>。几何直觉：极值点处 <span>$f$</span> 的等值线与约束曲线<strong>相切</strong>，两法向量平行，平行系数就是 <span>$\\lambda$</span>。闭区域上求最值 = 内部驻点值 + 边界（用拉格朗日或代入参数化）比较大小。</p>`,
+          boxes: [{ type: 'warn', label: '驻点≠极值点', html: '$z=xy$ 在原点处 $f_{x}=f_{y}=0$，但 $AC-B^{2}=-1<0$ 是鞍点——3D 展厅的双曲抛物面就是它。驻点必须再过 AC 检验。' }],
+        },
+      ],
+      formulas: [
+        { tex: '\\mathrm{d}z=f_{x}\\,\\mathrm{d}x+f_{y}\\,\\mathrm{d}y', note: '全微分（可微的定义载体）' },
+        { tex: '\\frac{\\partial z}{\\partial x}=-\\frac{F_{x}}{F_{z}}', note: '隐函数求导公式' },
+        { tex: '\\frac{\\partial f}{\\partial \\boldsymbol{l}}=\\nabla f\\cdot \\boldsymbol{e}_{l}', note: '方向导数 = 梯度投影' },
+        { tex: 'AC-B^{2}>0 \\text{ 且 } A>0 \\Rightarrow \\text{极小值}', note: '二元极值判别法' },
+      ],
+      example: {
+        title: '拉格朗日乘数法',
+        stem: '求表面积一定的长方体中体积最大者。',
+        steps: [
+          '目标 $V=xyz$，约束 $2(xy+yz+zx)=a^{2}$。构造 $L=xyz+\\lambda\\left[2(xy+yz+zx)-a^{2}\\right]$。',
+          '偏导为零：$yz+2\\lambda(y+z)=xz+2\\lambda(x+z)=xy+2\\lambda(x+y)=0$。',
+          '两两相减得 $(y-x)\\left[z+2\\lambda\\right]=0$ 等式。若 $x,y,z$ 不全相等则推出矛盾，故 $x=y=z$。',
+          '代入约束得边长 $x=y=z=\\dfrac{a}{\\sqrt{6}}$，为正方体。',
+        ],
+        concl: '对称问题优先猜想对称解，再用拉格朗日证明唯一性。约束优化中"所有变量地位对称 ⟹ 最优解往往对称"是高频结论。',
+      },
+      traps: [
+        { h: '把"偏导存在"当成"可微"', b: '多元微积分里这是两回事；反例 xy/(x²+y²) 偏导存在但沿不同方向极限不同。' },
+        { h: '隐函数求导冻结错变量', b: 'F_x 里的偏导默认"其余变量冻结"，与把 z 当成 x 的函数后求导含义不同，混用必错。' },
+      ],
+    },
+    {
+      id: 7, no: '07', name: '重积分', en: 'MULTIPLE INTEGRALS',
+      sub: '二重 · 三重 · 极坐标 · 雅可比',
+      model: 'models/ch_integral_solid.gltf',
+      modelCap: '曲顶柱体：二重积分的几何原型——底面是积分区域，高度是被积函数',
+      status: 'live',
+      lead: '重积分的全部技巧集中在两件事：选坐标系、定积分限。坐标系选对，积分限自动变简单；选错，一个对称性就能省掉的题会算半页纸。',
+      sections: [
+        {
+          h: '7.1 二重积分：曲顶柱体的体积',
+          html: `<div class="formula">$\\iint_{D}f(x,y)\\,\\mathrm{d}\\sigma=\\lim_{\\lambda\\to0}\\sum_{i}f(\\xi_{i},\\eta_{i})\\,\\Delta\\sigma_{i}$</div>
+<p>几何意义：<span>$f\\ge 0$</span> 时是区域 <span>$D$</span> 上以 <span>$f$</span> 为顶的曲顶柱体体积；<span>$f\\equiv1$</span> 时退化为区域面积——这常用来反解积分限或验证答案。</p>
+<p>化为累次积分的口诀：<strong>先看区域再定序</strong>。X 型区域（上下边界都是 <span>$y$</span> 的函数）先对 <span>$y$</span> 积：</p>
+<div class="formula">$\\int_{a}^{b}\\mathrm{d}x\\int_{y_{1}(x)}^{y_{2}(x)}f\\,\\mathrm{d}y$</div>
+<p>交换积分次序是必考动作：从给定的累次积分反画出区域 <span>$D$</span>，再按另一个方向写限。图画对，限就对；图画错，一切白算。</p>`,
+        },
+        {
+          h: '7.2 极坐标：什么时候换、怎么换',
+          html: `<div class="formula">$\\iint_{D}f(x,y)\\,\\mathrm{d}x\\mathrm{d}y=\\iint f(r\\cos\\theta,r\\sin\\theta)\\,r\\,\\mathrm{d}r\\,\\mathrm{d}\\theta$</div>
+<p>换极坐标的三个信号：<strong>区域是圆/环/扇形</strong>；<strong>被积函数含</strong> <span>$x^{2}+y^{2}$</span>；边界曲线用 <span>$r$</span>、<span>$\\theta$</span> 表达更简单。多出来的 <span>$r$</span> 是面积元的雅可比因子——忘乘 <span>$r$</span> 是本节第一大错。</p>
+<p>经典结果：<span>$\\displaystyle\\iint_{x^{2}+y^{2}\\le R^{2}}e^{-x^{2}-y^{2}}\\,\\mathrm{d}\\sigma=\\pi\\left(1-e^{-R^{2}}\\right)$</span>。直角坐标下 <span>$e^{-x^{2}}$</span> 没有初等原函数，极坐标下一行积完——这就是"坐标系选对"的威力。著名的概率积分 <span>$\\displaystyle\\int_{-\\infty}^{\\infty}e^{-x^{2}}\\mathrm{d}x=\\sqrt{\\pi}$</span> 正是用它取极限证出的。</p>`,
+          boxes: [{ type: 'warn', label: '忘乘雅可比 r', html: '极坐标面积元是 $r\\,\\mathrm{d}r\\,\\mathrm{d}\\theta$。漏写 $r$ 后结果"差一个量纲"，二重积分全错。' }],
+        },
+        {
+          h: '7.3 三重积分：三种坐标各管一段',
+          html: `<p>三重积分 <span>$\\iiint_{\\Omega}f\\,\\mathrm{d}V$</span> 的坐标系按区域形状选：</p>
+<ul>
+<li><strong>直角（投影法 / 截面法）</strong>：一般区域；截面法（先二后一）适合被积函数只含 <span>$z$</span>、截面面积易算的情形；</li>
+<li><strong>柱坐标</strong>：区域含旋转对称，<span>$\\mathrm{d}V=r\\,\\mathrm{d}r\\,\\mathrm{d}\\theta\\,\\mathrm{d}z$</span>；</li>
+<li><strong>球坐标</strong>：区域是球/锥，<span>$\\mathrm{d}V=r^{2}\\sin\\varphi\\,\\mathrm{d}r\\,\\mathrm{d}\\theta\\,\\mathrm{d}\\varphi$</span>。</li>
+</ul>
+<p>球坐标的两个角度别弄混：<span>$\\varphi$</span> 是与 <span>$z$</span> 轴的夹角（<span>$0\\le\\varphi\\le\\pi$</span>），<span>$\\theta$</span> 是水平转角。单位球积分验证：<span>$\\iiint \\mathrm{d}V=\\int_0^{2\\pi}\\mathrm{d}\\theta\\int_0^{\\pi}\\sin\\varphi\\,\\mathrm{d}\\varphi\\int_0^{1}r^{2}\\mathrm{d}r=\\tfrac{4\\pi}{3}$</span> ✓</p>`,
+        },
+        {
+          h: '7.4 对称性与几何应用',
+          html: `<p>对称性是重积分最快的加速器，规则只有一条要记牢：<strong>区域关于某轴对称 + 被积函数关于对应变量为奇函数 ⟹ 积分为零</strong>；偶函数则等于半区域的两倍。三者必须同时匹配——区域对称但函数不对称，什么结论都没有。</p>
+<p>应用三件套：</p>
+<ul>
+<li>体积：曲顶柱体 <span>$\\iint_D f\\,\\mathrm{d}\\sigma$</span> 或两曲面之差；</li>
+<li>质心：<span>$\\bar{x}=\\dfrac{1}{M}\\iint x\\rho\\,\\mathrm{d}\\sigma$</span>，均匀区域质心只由形状决定；</li>
+<li>转动惯量与引力：公式形态相同，被积函数换成 <span>$r^{2}$</span> 等。</li>
+</ul>`,
+        },
+        {
+          h: '7.5 换元一般理论与雅可比',
+          html: `<div class="formula">$\\iint_{D}f\\,\\mathrm{d}x\\mathrm{d}y=\\iint_{D'}f(x(u,v),y(u,v))\\left|\\dfrac{\\partial(x,y)}{\\partial(u,v)}\\right|\\mathrm{d}u\\mathrm{d}v$</div>
+<p>极坐标只是 <span>$x=r\\cos\\theta,\\ y=r\\sin\\theta$</span> 这一一般公式的特例（雅可比 = <span>$r$</span>）。广义极坐标 <span>$x=ar\\cos\\theta,\\ y=br\\sin\\theta$</span> 处理椭圆区域，雅可比为 <span>$abr$</span>。</p>
+<p>为什么面积元要乘雅可比？因为线性化后，<span>$(u,v)$</span> 平面上的小矩形被映射放大了 <span>$|J|$</span> 倍——这和一元换元中 <span>$\\mathrm{d}x=x'(t)\\,\\mathrm{d}t$</span> 是同一个思想的高维版本：微元要跟着映射"变形"。</p>`,
+        },
+      ],
+      formulas: [
+        { tex: '\\iint_{D}f\\,\\mathrm{d}x\\mathrm{d}y=\\int_{a}^{b}\\mathrm{d}x\\int_{y_{1}(x)}^{y_{2}(x)}f\\,\\mathrm{d}y', note: 'X 型区域化为累次积分' },
+        { tex: '\\iint_{D}f(x,y)\\,\\mathrm{d}x\\mathrm{d}y=\\iint f(r\\cos\\theta,r\\sin\\theta)\\,r\\,\\mathrm{d}r\\,\\mathrm{d}\\theta', note: '极坐标换元（雅可比为 r）' },
+        { tex: '\\mathrm{d}V=r^{2}\\sin\\varphi\\,\\mathrm{d}r\\,\\mathrm{d}\\theta\\,\\mathrm{d}\\varphi', note: '球坐标体积元' },
+        { tex: '\\iint f\\left|\\frac{\\partial(x,y)}{\\partial(u,v)}\\right|\\mathrm{d}u\\mathrm{d}v', note: '一般换元的雅可比' },
+      ],
+      example: {
+        title: '概率积分：极坐标的经典胜利',
+        stem: '证明 $\\displaystyle\\int_{-\\infty}^{\\infty}e^{-x^{2}}\\,\\mathrm{d}x=\\sqrt{\\pi}$。',
+        steps: [
+          '设 $I=\\int_{0}^{\\infty}e^{-x^{2}}\\mathrm{d}x$，则 $4I^{2}=\\iint_{\\mathbb{R}^{2}}e^{-x^{2}-y^{2}}\\mathrm{d}x\\mathrm{d}y$（两个一元积分的乘积 = 平方区域上的二重积分）。',
+          '换极坐标：被积函数变 $e^{-r^{2}}$，面积元变 $r\\,\\mathrm{d}r\\,\\mathrm{d}\\theta$，整个平面即 $0\\le r<\\infty$，$0\\le\\theta<2\\pi$。',
+          '$\\displaystyle\\int_{0}^{2\\pi}\\mathrm{d}\\theta\\int_{0}^{\\infty}e^{-r^{2}}r\\,\\mathrm{d}r=2\\pi\\cdot\\tfrac12=\\pi$。',
+          '故 $4I^{2}=\\pi$，$I=\\tfrac{\\sqrt\\pi}{2}$，即 $\\int_{-\\infty}^{\\infty}e^{-x^{2}}\\mathrm{d}x=\\sqrt{\\pi}$。',
+        ],
+        concl: '一元积不出的函数，升维后换坐标系反而一行搞定。这是"换元改变的是描述方式而不是问题本身"的最佳注脚。',
+      },
+      traps: [
+        { h: '极坐标漏乘 r', b: 'dxdy ≠ drdθ，面积元差一个 r。用"单位圆面积应为 π"自检可立刻发现。' },
+        { h: '交换次序只换积分号', b: '必须先由原限反画区域 D，再重写限；直接把内外限互换得到的是另一个区域上的积分。' },
+      ],
+    },
+    {
+      id: 8, no: '08', name: '曲线与曲面积分', en: 'LINE & SURFACE INTEGRAL',
+      sub: '第一类 · 第二类 · 格林 · 高斯',
+      model: 'models/ch_line_helix.gltf',
+      modelCap: '螺旋线：第二类曲线积分的载体——路径与方向都写进了定义',
+      status: 'live',
+      lead: '定向是这类积分的灵魂：换方向变号，闭合路径可化为区域积分。第一类问"积累了多少"，第二类问"沿这个方向做了多少功"。',
+      sections: [
+        {
+          h: '8.1 第一类曲线积分：对弧长积分',
+          html: `<div class="formula">$\\int_{L}f(x,y,z)\\,\\mathrm{d}s=\\lim\\sum f\\,\\Delta s_{i}$</div>
+<p>物理原型：曲线形细线的质量（<span>$f$</span> 为线密度）。<strong>与方向无关</strong>——弧长没有正负。计算时把曲线参数化，<span>$\\mathrm{d}s=\\sqrt{x'(t)^{2}+y'(t)^{2}+z'(t)^{2}}\\,\\mathrm{d}t$</span>，然后化成一元定积分。</p>
+<p>对称性照常可用：曲线关于某平面对称 + 函数为奇 ⟹ 积分为零。参数化的下限必须小于上限（<span>$\\mathrm{d}t\\ge 0$</span>），方向信息不由参数限携带——这是与第二类的关键区别。</p>`,
+        },
+        {
+          h: '8.2 第二类曲线积分：对坐标积分',
+          html: `<div class="formula">$\\int_{L}\\boldsymbol{F}\\cdot\\mathrm{d}\\boldsymbol{r}=\\int_{L}P\\,\\mathrm{d}x+Q\\,\\mathrm{d}y$</div>
+<p>物理原型：变力沿路径做的功。<strong>强依赖方向</strong>：反向积分变号。参数化时曲线方向要和参数增长方向一致，这是计算的第一步。</p>
+<p>两类积分可通过"弧长方向向量"互化：<span>$P\\,\\mathrm{d}x+Q\\,\\mathrm{d}y=(P\\cos\\alpha+Q\\cos\\beta)\\,\\mathrm{d}s$</span>，其中 <span>$(\\cos\\alpha,\\cos\\beta)$</span> 是切向单位向量。</p>`,
+          boxes: [{ type: 'warn', label: '方向即符号', html: '第二类曲线积分换方向直接变号。题目若说"沿 L 的负方向"，答案先按正向算再添负号。' }],
+        },
+        {
+          h: '8.3 格林公式：闭合曲线化为二重积分',
+          html: `<div class="formula">$\\oint_{L}P\\,\\mathrm{d}x+Q\\,\\mathrm{d}y=\\iint_{D}\\left(\\dfrac{\\partial Q}{\\partial x}-\\dfrac{\\partial P}{\\partial y}\\right)\\mathrm{d}x\\mathrm{d}y$</div>
+<p>使用条件三查：<span>$L$</span> <strong>闭合</strong>、<strong>正向</strong>（沿边界走，区域在左手边）、<span>$P,Q$</span> 在<strong>区域内有一阶连续偏导</strong>。条件三最常被忽略：若 <span>$P,Q$</span> 在区域内有奇点（如 <span>$\\dfrac{y}{x^{2}+y^{2}}$</span> 在原点），要"挖洞"——用小圆绕开奇点再套公式。</p>
+<p>平面上 <span>$\\dfrac{\\partial Q}{\\partial x}=\\dfrac{\\partial P}{\\partial y}$</span> 在单连通区域内成立 ⟹ 积分与路径无关，可换一条好算的路径（通常换成折线）。</p>`,
+        },
+        {
+          h: '8.4 第一类曲面积分：对面积积分',
+          html: `<div class="formula">$\\iint_{\\Sigma}f(x,y,z)\\,\\mathrm{d}S=\\iint_{D}f\\left(x,y,\\sqrt{R^{2}-x^{2}-y^{2}}\\right)\\dfrac{R}{\\sqrt{R^{2}-x^{2}-y^{2}}}\\,\\mathrm{d}x\\mathrm{d}y$</div>
+<p>（上式为球面 <span>$x^{2}+y^{2}+z^{2}=R^{2}$</span> 上半球投影到 <span>$xOy$</span> 面的情形，通用公式是 <span>$\\mathrm{d}S=\\sqrt{1+z_{x}^{2}+z_{y}^{2}}\\,\\mathrm{d}x\\mathrm{d}y$</span>。）物理原型：曲面壳的质量。<strong>无方向</strong>，恒正。</p>
+<p>计算套路固定三步：把 <span>$z$</span> 用 <span>$x,y$</span> 表示代入被积函数、算偏导拼出 <span>$\\mathrm{d}S$</span>、投影区域上做二重积分。利用曲面对称性先化简，比硬算省一半时间。</p>`,
+        },
+        {
+          h: '8.5 高斯公式与斯托克斯公式',
+          html: `<div class="formula">$\\oiint_{\\Sigma}\\boldsymbol{F}\\cdot\\boldsymbol{n}\\,\\mathrm{d}S=\\iiint_{\\Omega}\\nabla\\cdot\\boldsymbol{F}\\,\\mathrm{d}V$</div>
+<p>高斯公式把闭合曲面的第二类曲面积分化为内部的三重积分，条件同样是<strong>闭合 + 外侧 + 偏导连续</strong>。散度 <span>$\\nabla\\cdot\\boldsymbol{F}$</span> 是"单位体积向外净流出的通量"——通量守恒的局部化表达。</p>
+<p>斯托克斯公式是格林公式的空间版：<span>$\\oint_{L}\\boldsymbol{F}\\cdot\\mathrm{d}\\boldsymbol{r}=\\iint_{\\Sigma}(\\nabla\\times\\boldsymbol{F})\\cdot\\boldsymbol{n}\\,\\mathrm{d}S$</span>，旋度场无旋 ⟹ 环量为零。到此，微积分基本定理完成了它的高维统一：</p>
+<div class="formula">$\\int_{\\partial\\Omega}\\boldsymbol{F}\\cdot\\boldsymbol{n}\\,\\mathrm{d}S=\\int_{\\Omega}\\nabla\\cdot\\boldsymbol{F}\\,\\mathrm{d}V$</div>
+<p>牛顿–莱布尼茨、格林、高斯、斯托克斯都是"边界上的信息 = 内部导数的积分"这一句话的特例。</p>`,
+          boxes: [{ type: 'warn', label: '闭合才能用公式', html: '格林/高斯都要求边界闭合。不闭合就"补线"：补一条简单曲线使回路闭合，最后减掉补线上的积分。' }],
+        },
+      ],
+      formulas: [
+        { tex: '\\int_{L}P\\,\\mathrm{d}x+Q\\,\\mathrm{d}y=\\int_{t_{0}}^{t_{1}}\\left[P\\,x^{\\prime}(t)+Q\\,y^{\\prime}(t)\\right]\\mathrm{d}t', note: '第二类曲线积分参数化' },
+        { tex: '\\oint_{L}P\\,\\mathrm{d}x+Q\\,\\mathrm{d}y=\\iint_{D}\\left(Q_{x}-P_{y}\\right)\\mathrm{d}x\\mathrm{d}y', note: '格林公式（正向闭合）' },
+        { tex: '\\mathrm{d}S=\\sqrt{1+z_{x}^{2}+z_{y}^{2}}\\,\\mathrm{d}x\\mathrm{d}y', note: '曲面向 xy 面投影的面积元' },
+        { tex: '\\oiint_{\\Sigma}\\boldsymbol{F}\\cdot\\boldsymbol{n}\\,\\mathrm{d}S=\\iiint_{\\Omega}\\nabla\\cdot\\boldsymbol{F}\\,\\mathrm{d}V', note: '高斯公式（外侧闭合）' },
+      ],
+      example: {
+        title: '格林公式 + 挖洞',
+        stem: '计算 $\\displaystyle\\oint_{L}\\dfrac{y\\,\\mathrm{d}x-x\\,\\mathrm{d}y}{x^{2}+y^{2}}$，其中 $L$ 为包含原点的任意正向简单闭曲线。',
+        steps: [
+          '$P=\\dfrac{y}{x^{2}+y^{2}},\\ Q=\\dfrac{-x}{x^{2}+y^{2}}$ 在原点无定义——奇点在区域内，不能直接套格林公式。',
+          '挖洞：取小圆 $l:\\ x^{2}+y^{2}=\\varepsilon^{2}$（正向），在圆环区域上 $Q_{x}-P_{y}=0$，故大环上积分为零，得 $\\oint_{L}=\\oint_{l}$。',
+          '小圆上 $x=\\varepsilon\\cos t,\\ y=\\varepsilon\\sin t$：分子 $y\\,\\mathrm{d}x-x\\,\\mathrm{d}y=-\\varepsilon^{2}\\mathrm{d}t$，分母 $\\varepsilon^{2}$。',
+          '$\\displaystyle\\oint_{l}\\frac{-\\varepsilon^{2}\\,\\mathrm{d}t}{\\varepsilon^{2}}=\\int_{0}^{2\\pi}-\\mathrm{d}t=-2\\pi$。',
+        ],
+        concl: '奇点在区域内时先挖洞再套公式，把难算的路径换成规则路径。答案 $-2\\pi$ 只依赖绕原点圈数（绕数），与 $L$ 的具体形状无关——这是"积分与路径无关"的推广：与路径的"绕原点拓扑"有关。',
+      },
+      traps: [
+        { h: '奇点在区域内仍套格林公式', b: 'P,Q 必须在闭区域内处处有连续偏导；有奇点先挖洞，否则结论可能差 2π 的整数倍。' },
+        { h: '曲面投影时 dS 漏开根', b: 'dS = √(1+zₓ²+z_y²) dxdy，直接用 dxdy 当 dS 会把面积算小。' },
+      ],
+    },
+    {
+      id: 9, no: '09', name: '无穷级数', en: 'INFINITE SERIES',
+      sub: '正项级数 · 幂级数 · 傅里叶',
+      model: 'models/ex_standing_wave.glb',
+      modelCap: '驻波：有限项叠加出波形，无穷项傅里叶级数能把任意周期信号分解为正弦之和',
+      status: 'live',
+      lead: '级数是"离散的积分"：把加法推到无穷后的收敛理论。两条主线贯穿全章——判别收敛（比较/比值/根值），以及把函数展开成幂级数或傅里叶级数。',
+      sections: [
+        {
+          h: '9.1 收敛的定义：部分和的极限',
+          html: `<div class="formula">$\\sum_{n=1}^{\\infty}u_{n}=S \\iff S_{n}=\\sum_{k=1}^{n}u_{k}\\to S$</div>
+<p>级数敛散性完全由部分和序列定义。<strong>必要条件</strong>：收敛 ⟹ <span>$u_{n}\\to 0$</span>。反向不成立——调和级数 <span>$\\sum\\dfrac1n$</span> 通项趋于零却发散，它的发散证明（分组放大不等式）是全章最优雅的论证：</p>
+<div class="formula">$1+\\tfrac12+\\left(\\tfrac13+\\tfrac14\\right)+\\left(\\tfrac15+\\cdots+\\tfrac18\\right)+\\cdots>1+\\tfrac12+\\tfrac12+\\tfrac12+\\cdots$</div>
+<p>每个括号都大于 <span>$\\tfrac12$</span>，部分和必然越过任何界限。几何级数 <span>$\\sum q^{n}$</span> 是另一块基石：<span>$|q|<1$</span> 收敛于 <span>$\\dfrac{a}{1-q}$</span>，<span>$|q|\\ge 1$</span> 发散。</p>`,
+        },
+        {
+          h: '9.2 正项级数：三大判别法',
+          html: `<p>正项级数的部分和单调递增，收敛等价于有上界——这给了所有判别法一个共同底座：</p>
+<ul>
+<li><strong>比较判别法</strong>：与大项比。基准用 <span>$p$</span>-级数 <span>$\\sum\\dfrac{1}{n^{p}}$</span>（<span>$p>1$</span> 收敛，<span>$p\\le1$</span> 发散）与几何级数；</li>
+<li><strong>比值（达朗贝尔）</strong>：<span>$\\lim\\dfrac{u_{n+1}}{u_{n}}=\\rho<1$</span> 收敛，<span>$\\rho>1$</span> 发散；含阶乘、指数时首选；</li>
+<li><strong>根值（柯西）</strong>：<span>$\\lim\\sqrt[n]{u_{n}}=\\rho$</span>，含 <span>$n$</span> 次幂时首选。</li>
+</ul>
+<div class="formula">$\\lim_{n\\to\\infty}\\dfrac{u_{n+1}}{u_{n}}=\\rho\\ (<1\\ \\text{收敛},\\ >1\\ \\text{发散},\\ =1\\ \\text{失效})$</div>
+<p><span>$\\rho=1$</span> 时判别失效，要退回比较判别法精细估计——比如 <span>$\\sum\\dfrac{1}{n^{2}}$</span> 和 <span>$\\sum\\dfrac1n$</span> 比值极限都是 1，敛散却相反。</p>`,
+          boxes: [{ type: 'warn', label: '判别法边界', html: '比值/根值判别法在极限等于 1 时完全失效，此时必须换比较判别法；对交错级数则用莱布尼茨。' }],
+        },
+        {
+          h: '9.3 交错级数与绝对收敛',
+          html: `<p>莱布尼茨判别法：交错级数 <span>$\\sum(-1)^{n-1}a_{n}\\ (a_{n}>0)$</span>，若 <span>$a_{n}$</span> 单调递减且趋于零，则收敛，且余项不超过首 discarded 项——<span>$\\left|R_{n}\\right|\\le a_{n+1}$</span>，这使交错级数天然带误差估计。</p>
+<p>更强的概念是<strong>绝对收敛</strong>：<span>$\\sum|u_{n}|$</span> 收敛 ⟹ <span>$\\sum u_{n}$</span> 收敛；反之收敛但不绝对收敛的叫<strong>条件收敛</strong>（如 <span>$\\sum\\dfrac{(-1)^{n-1}}{n}$</span>）。交换律在这里分野：绝对收敛级数可任意重排不改变和；条件收敛级数<strong>重排可以改变和</strong>，甚至重排成任何指定的数（Riemann 定理）——"无穷求和"不再天然满足交换律。</p>`,
+        },
+        {
+          h: '9.4 幂级数：收敛半径与函数展开',
+          html: `<div class="formula">$\\sum_{n=0}^{\\infty}a_{n}x^{n},\\quad R=\\dfrac{1}{\\lim\\sqrt[n]{|a_{n}|}}\\ \\text{（或比值法同式）}$</div>
+<p>幂级数在 <span>$(-R,R)$</span> 内绝对收敛、端点单独讨论。收敛区间内可以逐项求导、逐项积分且收敛半径不变——这是把函数展开成级数的发动机：</p>
+<div class="formula">$\\dfrac{1}{1-x}=\\sum_{n=0}^{\\infty}x^{n},\\quad e^{x}=\\sum_{n=0}^{\\infty}\\dfrac{x^{n}}{n!},\\quad \\ln(1+x)=\\sum_{n=1}^{\\infty}\\dfrac{(-1)^{n-1}}{n}x^{n}\\ (x\\in(-1,1])$</div>
+<p>展开两步走：用已知展开式 + 换元/逐项运算拼出目标；或者直接算泰勒系数。展开式<strong>唯一</strong>（由各阶导数唯一决定），所以怎么展开结果都一样。应用上，幂级数可以求"积不出来"的积分（如 <span>$\\int e^{-x^{2}}\\mathrm{d}x$</span>）和求微分方程的级数解。</p>`,
+        },
+        {
+          h: '9.5 傅里叶级数：用正弦搭万物',
+          html: `<div class="formula">$f(x)\\sim\\dfrac{a_{0}}{2}+\\sum_{n=1}^{\\infty}\\left(a_{n}\\cos nx+b_{n}\\sin nx\\right),\\quad a_{n}=\\dfrac1\\pi\\int_{-\\pi}^{\\pi}f(x)\\cos nx\\,\\mathrm{d}x$</div>
+<p>幂级数用多项式逼近，傅里叶级数用三角函数逼近——后者的基函数互相正交，系数由投影直接给出。收敛定理（狄利克雷）比泰勒宽松得多：只要分段单调有界，级数就收敛到 <span>$f$</span> 在间断点的左右极限平均值。</p>
+<p>这就是它成为信号处理基石的原因：任何周期信号（方波、锯齿、语音）都可分解为频率 <span>$n$</span> 的正弦叠加，间断点处的 Gibbs 现象（约 9% 的过冲）则揭示了"逐点收敛"与"一致收敛"的差距。展厅里的驻波模型，正是有限个正弦分量叠加出波形的样子。</p>`,
+        },
+      ],
+      formulas: [
+        { tex: '\\sum_{n=0}^{\\infty}q^{n}=\\frac{a}{1-q}\\ (|q|<1)', note: '几何级数（收敛基准之一）' },
+        { tex: '\\sum\\frac{1}{n^{p}}\\ \\text{收敛} \\iff p>1', note: 'p-级数（比较判别基准）' },
+        { tex: 'e^{x}=\\sum_{n=0}^{\\infty}\\frac{x^{n}}{n!}\\ (x\\in\\mathbb{R})', note: '最重要的幂级数展开' },
+        { tex: 'a_{n}=\\frac{1}{\\pi}\\int_{-\\pi}^{\\pi}f(x)\\cos nx\\,\\mathrm{d}x', note: '傅里叶系数（正交投影）' },
+      ],
+      example: {
+        title: '条件收敛与重排',
+        stem: '判断 $\\sum_{n=1}^{\\infty}\\dfrac{(-1)^{n-1}}{n}$ 的敛散性；并说明为什么它的"和"依赖求和顺序。',
+        steps: [
+          '取绝对值得 $\\sum\\dfrac1n$，是发散的调和级数 ⟹ 不绝对收敛。',
+          '原级数是交错级数：$a_{n}=\\dfrac1n$ 单调递减趋于零，由莱布尼茨判别法收敛——故为<strong>条件收敛</strong>。',
+          '条件收敛 ⟹ 正项部分与负项部分各自发散到 $+\\infty$ 与 $-\\infty$。',
+          '重排时可以让正项"多攒几个"再放负项：先取 $k$ 个正项再取 1 个负项，部分和被推向 $+\\infty$；按任意指定比例攒放，可收敛到任意实数（Riemann 重排定理）。',
+        ],
+        concl: '无穷求和不再满足交换律：绝对收敛才能安全重排，条件收敛的和依赖于顺序。这也是"级数收敛"必须用部分和极限定义、不能想当然当作有限和推广的原因。',
+      },
+      traps: [
+        { h: '用通项趋于零判收敛', b: 'uₙ→0 只是必要条件；调和级数 Σ1/n 是标准反例。判敛必须用判别法，不能只看通项。' },
+        { h: '幂级数端点不单独讨论', b: '收敛区间端点的敛散与内部无关：Σ xⁿ/n! 全轴收敛，但 Σ xⁿ/n 在 x=1 收敛、x=-1 发散。' },
+      ],
+    },
+    {
+      id: 10, no: '10', name: '常微分方程', en: 'ORDINARY DIFFERENTIAL EQUATIONS',
+      sub: '一阶方程 · 高阶线性 · 常系数',
+      model: 'models/ch_ode_flow.gltf',
+      modelCap: '向量场流线：解曲线沿场方向推进，初值决定走哪一条',
+      status: 'live',
+      lead: '解方程的本质是找一条曲线，使它的每一点切向都等于给定的场。初值在这张"方向场地图"上选一个起点，解就是从那里出发的一条流线。',
+      sections: [
+        {
+          h: '10.1 方程、解与方向场',
+          html: `<div class="formula">$y\\'=f(x,y),\\qquad y=y(x)\\ \\text{使恒等式成立}$</div>
+<p>一阶方程的解是一族曲线（通解含一个任意常数），初值条件 <span>$y(x_{0})=y_{0}$</span> 从中挑出一条（特解）。存在唯一性定理（Picard）：<span>$f$</span> 与 <span>$f_{y}$</span> 在初值邻域连续 ⟹ 过该点的解存在且唯一。</p>
+<p>唯一性一旦被破坏，过同一点可以分叉出多条解——<span>$y\\'=\\sqrt{|y|}$</span> 在 <span>$y=0$</span> 处 <span>$f_{y}$</span> 爆炸，解可以从横轴上任意时刻"起飞"。3D 模型里的流线场，就是"每点切向 = 场向量"这一句话的可视化。</p>`,
+        },
+        {
+          h: '10.2 可分离变量与一阶线性',
+          html: `<p>两类可以直接积分的结构。可分离变量：把 <span>$x$</span> 与 <span>$y$</span> 各归一边再积分</p>
+<div class="formula">$g(y)\\,\\mathrm{d}y=f(x)\\,\\mathrm{d}x\\ \\Longrightarrow\\ \\int g(y)\\,\\mathrm{d}y=\\int f(x)\\,\\mathrm{d}x$</div>
+<p>一阶线性 <span>$y\\'+P(x)y=Q(x)$</span> 用积分因子：<span>$\\mu=e^{\\int P\\mathrm{d}x}$</span>，乘上方程左边恰好是 <span>$(\\mu y)\\'$</span>：</p>
+<div class="formula">$y=e^{-\\int P\\mathrm{d}x}\\left(\\int Q\\,e^{\\int P\\mathrm{d}x}\\,\\mathrm{d}x+C\\right)$</div>
+<p>公式不必背死，记住思想：<strong>找一个因子使左边变成某个乘积的导数</strong>。齐次方程 <span>$y\\'=\\varphi(y/x)$</span> 换元 <span>$u=y/x$</span> 后化为可分离变量。</p>`,
+        },
+        {
+          h: '10.3 可降阶的高阶方程',
+          html: `<p>三类可降阶结构，对应三种"缺什么就换什么"的换元：</p>
+<ul>
+<li><span>$y^{(n)}=f(x)$</span>：直接连续积分 <span>$n$</span> 次，每积一次添一个常数；</li>
+<li>缺 <span>$y$</span>：令 <span>$p=y\\'$</span>，方程降为 <span>$p$</span> 的一阶方程，解出 <span>$p$</span> 再积一次得 <span>$y$</span>；</li>
+<li>缺 <span>$x$</span>：令 <span>$p=y\\'$</span> 且把 <span>$p$</span> 视为 <span>$y$</span> 的函数，<span>$y\\'\\'=p\\dfrac{\\mathrm{d}p}{\\mathrm{d}y}$</span>。</li>
+</ul>
+<p>第三类的链式替换 <span>$y\\'\\'=p\\,p\\'$</span>（对 <span>$y$</span> 求导）最容易写错方向——是把 <span>$x$</span> 从方程里"蒸发"的关键一步。</p>`,
+        },
+        {
+          h: '10.4 二阶常系数线性方程',
+          html: `<div class="formula">$y\\'\\'+py\\\'+qy=0\\ \\Longrightarrow\\ r^{2}+pr+q=0,\\quad y=C_{1}e^{r_{1}x}+C_{2}e^{r_{2}x}$</div>
+<p>特征方程按判别式三分：两实根、重根（<span>$y=(C_{1}+C_{2}x)e^{rx}$</span>）、共轭复根 <span>$r=\\alpha\\pm\\beta i$</span>（<span>$y=e^{\\alpha x}(C_{1}\\cos\\beta x+C_{2}\\sin\\beta x)$</span>）——最后一种正是弹簧振子"欠阻尼振荡"的数学形态。</p>
+<p>非齐次 <span>$y\\'\\'+py\\\'+qy=f(x)$</span>：通解 = 齐次通解 + 一个特解。特解用<strong>待定系数法</strong>按 <span>$f$</span> 的形态设解：</p>
+<div class="formula">$f=P_{m}(x)e^{\\lambda x}\\ \\Longrightarrow\\ y^{*}=x^{k}Q_{m}(x)e^{\\lambda x},\\ k=\\lambda\\ \\text{作为特征根的重数}$</div>
+<p><span>$k$</span> 是补救因子：设出的解如果撞上齐次解（共振），要乘 <span>$x$</span> 修正。<span>$f$</span> 含三角函数时同样按复指数框架处理。</p>`,
+          boxes: [{ type: 'warn', label: '共振要乘 x', html: '自由项的 λ 恰好是特征根时（如 y\'\'+y=cos x），按常规设的特解是齐次解、代进去恒等于零，必须乘 x 后重设。' }],
+        },
+        {
+          h: '10.5 线性方程组与定性分析',
+          html: `<div class="formula">$\\dot{\\boldsymbol{x}}=A\\boldsymbol{x},\\quad \\boldsymbol{x}(t)=e^{At}\\boldsymbol{x}_{0},\\quad e^{At}\\ \\text{由 } A\\ \\text{的特征结构决定}$</div>
+<p>把一元理论推向向量：解由矩阵指数生成，特征值决定每个模态是衰减（负实部）、增长（正实部）还是振荡（复数）。二维相图按特征值分类：稳定结点、鞍点、中心、螺旋点——3D 模型的流线正是这些形态的直观呈现。</p>
+<p>这就是全课程的"工业出口"：弹簧振子、RLC 电路、人口模型、控制系统，都归结为常系数线性方程（组）。特征值不仅给解，还给出定性结论——稳定性完全由特征值实部的符号决定，这与后续控制理论、机器学习的谱方法一脉相承。</p>`,
+        },
+      ],
+      formulas: [
+        { tex: 'y=e^{-\\int P\\mathrm{d}x}\\left(\\int Q e^{\\int P\\mathrm{d}x}\\,\\mathrm{d}x+C\\right)', note: '一阶线性方程通解（积分因子法）' },
+        { tex: 'r^{2}+pr+q=0 \\Rightarrow y=C_{1}e^{r_{1}x}+C_{2}e^{r_{2}x}', note: '常系数齐次方程的特征根法' },
+        { tex: 'y=e^{\\alpha x}(C_{1}\\cos\\beta x+C_{2}\\sin\\beta x)', note: '共轭复根情形（欠阻尼振荡）' },
+        { tex: 'y^{*}=x^{k}Q_{m}(x)e^{\\lambda x}', note: '非齐次特解的待定形式（k 为共振修正）' },
+      ],
+      example: {
+        title: '欠阻尼弹簧振子',
+        stem: '求解 $y^{\\prime\\prime}+2y^{\\prime}+5y=0$，$y(0)=1$，$y^{\\prime}(0)=0$，并解释解的物理形态。',
+        steps: [
+          '特征方程 $r^{2}+2r+5=0$，判别式 $4-20<0$，得共轭复根 $r=-1\\pm2i$。',
+          '通解 $y=e^{-x}(C_{1}\\cos 2x+C_{2}\\sin 2x)$。',
+          '代初值：$y(0)=C_{1}=1$；求导后 $y^{\\prime}(0)=-C_{1}+2C_{2}=0 \\Rightarrow C_{2}=\\tfrac12$。',
+          '特解 $y=e^{-x}\\left(\\cos 2x+\\tfrac12\\sin 2x\\right)=\\dfrac{\\sqrt5}{2}e^{-x}\\cos(2x-\\arctan\\tfrac12)$。',
+        ],
+        concl: '解是"指数衰减包络 × 等幅振荡"：振幅按 e⁻ˣ 衰减，频率由虚部 2 决定。阻尼小于临界值时系统振荡着回到平衡——欠阻尼。合写成一个余弦的步骤（辅助角公式）在写运动方程时常用。',
+      },
+      traps: [
+        { h: '共振情形忘乘 x', b: '自由项形态与齐次解重合时，常规待定解代入恒为零；必须乘 x（重数决定乘几次）。' },
+        { h: '缺 x 型方程用 y\'\'=p\' 而不是 p·dp/dy', b: '把 p 看成 y 的函数时 y\'\' = dp/dx = (dp/dy)·y\' = p·dp/dy，漏掉链式因子直接降阶失败。' },
+      ],
+    },
   ],
 
   insights: [
